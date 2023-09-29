@@ -40,7 +40,7 @@ import { ref, getCurrentInstance } from 'vue'
 import { FileStore } from '../../../stores/FileStore.ts'
 import type { FofInfo } from '../../../types/FofInfo.ts'
 import { useRouter } from 'vue-router'
-import { BusEvent, SwitchFilePath } from '../../../types/BusEvent'
+import { BusEvent } from '../../../types/BusEvent'
 
 const props = defineProps({
     fofInfo: {
@@ -78,12 +78,12 @@ const handlePick = async (item: FofInfo) => {
             expandFolder.value.push(item.id)
         }
     } else if (fileStore.filePath !== item.file_path) {
-        bus.emit(BusEvent.SwitchFilePath, {
-            newPath: item.file_path,
-            oldPath: fileStore.filePath
-        } as SwitchFilePath)
         fileStore.setFilePath(item.file_path)
-        router.push({ name: 'file' })
+        if (router.currentRoute.value.name !== 'file') {
+            router.push({ name: 'file' })
+            bus.emit(BusEvent.SwitchFilePath, item.file_path)
+            bus.emit(BusEvent.SwitchFilePath, item.file_path)
+        }
     }
 }
 </script>

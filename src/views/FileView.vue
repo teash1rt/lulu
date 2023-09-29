@@ -7,13 +7,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed, markRaw, getCurrentInstance } from 'vue'
+import { ref, watch, computed, markRaw, getCurrentInstance, onMounted } from 'vue'
 import type { Raw } from 'vue'
 import { invoke } from '@tauri-apps/api/tauri'
 import codeEditor from '../components/editors/codeEditor.vue'
 import mdEditor from '../components/editors/mdEditor.vue'
 import luluEditor from '../components/editors/luluEditor.vue'
-import { BusEvent, SwitchFilePath } from '../types/BusEvent'
+import { BusEvent } from '../types/BusEvent'
+import { FileStore } from '../stores/FileStore.ts'
 
 const content = ref<string>('')
 const path = ref<string>('')
@@ -45,9 +46,16 @@ watch(extension, newV => {
 
 const bus = getCurrentInstance()!.appContext.config.globalProperties.$bus
 
-bus.on(BusEvent.SwitchFilePath, async (pathInfo: SwitchFilePath) => {
-    content.value = (await readFile(pathInfo.newPath)) as string
-    path.value = pathInfo.newPath
+const fileStore = FileStore()
+
+onMounted(async () => {
+    content.value = (await readFile(fileStore.filePath)) as string
+    path.value = fileStore.filePath
+})
+
+bus.on(BusEvent.SwitchFilePath, async (newPath: string) => {
+    content.value = (await readFile(newPath)) as string
+    path.value = newPath
 })
 </script>
 
