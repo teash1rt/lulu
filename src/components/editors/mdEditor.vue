@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, watch } from 'vue'
+import { ref, nextTick, watch, onBeforeUnmount } from 'vue'
 import {
     getLineScope,
     getLineContext,
@@ -40,12 +40,7 @@ let lastContent = ''
 watch(
     () => props.path,
     async (_, oldV) => {
-        if (content.value !== lastContent) {
-            await invoke('write_file', {
-                dir: oldV,
-                text: content.value
-            })
-        }
+        await saveFile(oldV)
         content.value = props.content
         lastContent = props.content
     }
@@ -90,6 +85,19 @@ const handleBlockquote = (event: KeyboardEvent) => {
         target.selectionEnd = pos + 1
     })
 }
+
+const saveFile = async (path: string) => {
+    if (content.value !== lastContent) {
+        await invoke('write_file', {
+            dir: path,
+            text: content.value
+        })
+    }
+}
+
+onBeforeUnmount(async () => {
+    await saveFile(props.path)
+})
 </script>
 
 <style lang="less" scoped>

@@ -1,8 +1,6 @@
 <template>
     <div class="file-view">
-        <keep-alive>
-            <component :is="component" :content="content" :path="path" />
-        </keep-alive>
+        <component :is="component" :content="content" :path="path" />
     </div>
 </template>
 

@@ -81,9 +81,8 @@ const handlePick = async (item: FofInfo) => {
         fileStore.setFilePath(item.file_path)
         if (router.currentRoute.value.name !== 'file') {
             router.push({ name: 'file' })
-            bus.emit(BusEvent.SwitchFilePath, item.file_path)
-            bus.emit(BusEvent.SwitchFilePath, item.file_path)
         }
+        bus.emit(BusEvent.SwitchFilePath, item.file_path)
     }
 }
 </script>

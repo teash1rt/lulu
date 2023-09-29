@@ -29,16 +29,11 @@ const props = defineProps({
 })
 
 let lastContent = ''
+
 watch(
     () => props.path,
     async (newV, oldV) => {
-        const curContent = toRaw(editor.value)?.getValue()
-        if (curContent !== lastContent) {
-            await invoke('write_file', {
-                dir: oldV,
-                text: curContent
-            })
-        }
+        await saveFile(oldV)
         lastContent = props.content
         toRaw(editor.value!).setValue(lastContent)
         monaco.editor.setModelLanguage(toRaw(editor.value!).getModel()!, getExtension(newV))
@@ -67,7 +62,18 @@ const setEditor = (el: HTMLElement) => {
     return editor
 }
 
-onBeforeUnmount(() => {
+const saveFile = async (path: string) => {
+    const curContent = toRaw(editor.value)?.getValue()
+    if (curContent !== lastContent) {
+        await invoke('write_file', {
+            dir: path,
+            text: curContent
+        })
+    }
+}
+
+onBeforeUnmount(async () => {
+    await saveFile(props.path)
     toRaw(editor.value!).dispose()
 })
 
