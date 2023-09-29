@@ -7,7 +7,7 @@
 
 <script setup lang="ts">
 import * as monaco from 'monaco-editor'
-import { ref, watch, onBeforeUnmount, toRaw, getCurrentInstance } from 'vue'
+import { ref, watch, onBeforeUnmount, toRaw } from 'vue'
 import { invoke } from '@tauri-apps/api/tauri'
 
 // import hljs from 'highlight.js'
@@ -16,7 +16,6 @@ import { invoke } from '@tauri-apps/api/tauri'
 // console.log(c);
 
 const editor = ref<monaco.editor.IStandaloneCodeEditor | null>(null)
-const bus = getCurrentInstance()!.appContext.config.globalProperties.$bus
 
 const props = defineProps({
     content: {

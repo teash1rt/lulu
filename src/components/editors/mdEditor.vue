@@ -20,7 +20,7 @@ import {
 } from '../../utils/mdContext'
 import 'highlight.js/styles/monokai-sublime.css'
 import '../../styles/markdown.less'
-// import { invoke } from '@tauri-apps/api/tauri'
+import { invoke } from '@tauri-apps/api/tauri'
 
 const props = defineProps({
     content: {
@@ -36,10 +36,18 @@ const props = defineProps({
 const content = ref<string>(props.content)
 const textarea = ref<HTMLTextAreaElement | null>(null)
 
+let lastContent = ''
 watch(
     () => props.path,
-    async () => {
+    async (_, oldV) => {
+        if (content.value !== lastContent) {
+            await invoke('write_file', {
+                dir: oldV,
+                text: content.value
+            })
+        }
         content.value = props.content
+        lastContent = props.content
     }
 )
 

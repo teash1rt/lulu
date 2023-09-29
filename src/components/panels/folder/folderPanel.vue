@@ -39,7 +39,7 @@ onMounted(() => {
         fofInfo.value = fileStore.fofInfo
     } else {
         listen('open_folder', event => {
-            fofInfo.value = event.payload as any[]
+            fofInfo.value = event.payload as FofInfo[]
         })
     }
 })
