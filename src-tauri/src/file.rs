@@ -1,7 +1,6 @@
 use crate::Fof;
 use crate::STATIC_DIR;
-use std::fs::OpenOptions;
-use std::fs::{read_dir, File};
+use std::fs::{read_dir, remove_file, rename, File, OpenOptions};
 use std::io::{Read, Write};
 use std::path::Path;
 use tauri::command;
@@ -65,19 +64,34 @@ pub fn open_folder(dir: String) -> Vec<Fof> {
 }
 
 #[command]
-pub fn read_file(dir: String) -> String {
-    let mut file = File::open(dir).unwrap();
+pub fn read_file(path: String) -> String {
+    let mut file = File::open(path).unwrap();
     let mut buf = String::new();
     file.read_to_string(&mut buf).unwrap();
     buf
 }
 
 #[command]
-pub fn write_file(dir: String, text: String) {
+pub fn write_file(path: String, text: String) {
     let mut file = OpenOptions::new()
         .write(true)
         .truncate(true)
-        .open(dir)
+        .open(path)
         .unwrap();
     file.write_all(text.as_bytes()).unwrap();
+}
+
+#[command]
+pub fn create_file(path: String) {
+    File::create(path).unwrap();
+}
+
+#[command]
+pub fn delete_file(path: String) {
+    remove_file(path).unwrap();
+}
+
+#[command]
+pub fn rename_file(old_path: String, new_path: String) {
+    rename(old_path, new_path).unwrap();
 }

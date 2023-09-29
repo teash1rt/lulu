@@ -3,7 +3,7 @@
     windows_subsystem = "windows"
 )]
 
-use file::{open_folder, read_file, write_file};
+use file::{create_file, delete_file, open_folder, read_file, rename_file, write_file};
 mod file;
 
 use runner::run_code;
@@ -29,7 +29,10 @@ fn main() {
             open_folder,
             read_file,
             write_file,
-            run_code
+            run_code,
+            create_file,
+            delete_file,
+            rename_file
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
