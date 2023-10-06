@@ -10,11 +10,7 @@ pub struct Result {
 
 #[command]
 pub fn run_code(code: String) -> Result {
-    let output = Command::new("node")
-        .arg("-e")
-        .arg(code)
-        .output()
-        .unwrap_or_else(|_| panic!("Failed to execute command"));
+    let output = Command::new("node").arg("-e").arg(code).output().unwrap();
 
     if output.status.success() {
         let stdout = String::from_utf8_lossy(&output.stdout);
