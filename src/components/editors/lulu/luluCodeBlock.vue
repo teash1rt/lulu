@@ -71,7 +71,9 @@ const setEditor = (el: HTMLElement) => {
     })
 
     editor.value.onDidBlurEditorText(() => {
-        luluStore.changeFocus(false, props.luluInfo.id)
+        setTimeout(() => {
+            luluStore.changeFocus(false, props.luluInfo.id)
+        }, 200)
     })
     return editor
 }

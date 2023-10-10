@@ -40,7 +40,9 @@ const html = ref<string>(render(content.value).html)
 const status = ref<'md' | 'html'>('md')
 const luluStore = LuluStore()
 const handleBlur = () => {
-    luluStore.changeFocus(false, props.luluInfo.id)
+    setTimeout(() => {
+        luluStore.changeFocus(false, props.luluInfo.id)
+    }, 200)
     if (content.value.trim()) {
         html.value = render(content.value).html
         status.value = 'html'
