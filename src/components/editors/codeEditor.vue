@@ -33,7 +33,7 @@ let lastContent = ''
 watch(
     () => props.path,
     async (newV, oldV) => {
-        await saveFile(oldV)
+        // await saveFile(oldV)
         lastContent = props.content
         toRaw(editor.value!).setValue(lastContent)
         monaco.editor.setModelLanguage(toRaw(editor.value!).getModel()!, getExtension(newV))
@@ -73,7 +73,7 @@ const saveFile = async (path: string) => {
 }
 
 onBeforeUnmount(async () => {
-    await saveFile(props.path)
+    // await saveFile(props.path)
     toRaw(editor.value!).dispose()
 })
 

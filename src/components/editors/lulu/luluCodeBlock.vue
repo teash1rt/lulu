@@ -14,6 +14,7 @@ import { ref, toRaw, onBeforeUnmount, reactive, PropType } from 'vue'
 import { invoke } from '@tauri-apps/api/tauri'
 import type { CodeResult } from '../../../types/CodeResult'
 import type { LuluInfo } from '../../../types/LuluInfo'
+import { LuluStore } from '../../../stores/LuluStore'
 
 const props = defineProps({
     luluInfo: {
@@ -29,6 +30,7 @@ const codeResult = reactive<CodeResult>({
     message: null
 })
 
+const luluStore = LuluStore()
 const setEditor = (el: HTMLElement) => {
     editor.value = monaco.editor.create(el, {
         value: props.luluInfo.content,
@@ -62,6 +64,14 @@ const setEditor = (el: HTMLElement) => {
             height: newHeight + 20,
             width: editor.value!.getLayoutInfo().width
         })
+    })
+
+    editor.value.onDidFocusEditorText(() => {
+        luluStore.changeFocus(true, props.luluInfo.id)
+    })
+
+    editor.value.onDidBlurEditorText(() => {
+        luluStore.changeFocus(false, props.luluInfo.id)
     })
     return editor
 }
