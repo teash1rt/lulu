@@ -5,7 +5,7 @@
         <div class="workspace">
             <component
                 v-for="(component, index) in components"
-                :key="index"
+                :key="blocks[index].id"
                 :is="component"
                 :luluInfo="blocks[index]" />
         </div>
@@ -17,6 +17,8 @@ import { ref, markRaw } from 'vue'
 import luluMdBlock from './lulu/luluMdBlock.vue'
 import luluCodeBlock from './lulu/luluCodeBlock.vue'
 import { LuluInfo } from '../../types/LuluInfo'
+import { getUUID } from '../../utils/uuid'
+import { LuluStore } from '../../stores/LuluStore'
 
 const props = defineProps({
     content: {
@@ -36,8 +38,23 @@ for (let block of blocks) {
     components.value.push(block.type === 'md' ? markRaw(luluMdBlock) : markRaw(luluCodeBlock))
 }
 
-const addEditor = (editor: 'md' | 'code') => {
-    components.value.push(editor === 'md' ? markRaw(luluMdBlock) : markRaw(luluCodeBlock))
+const luluStore = LuluStore()
+const addEditor = (type: 'md' | 'code') => {
+    let index = blocks.length
+    if (luluStore.focusId !== null) {
+        for (let i = 0; i < blocks.length; i++) {
+            if (luluStore.focusId === blocks[i].id) {
+                index = i + 1
+                break
+            }
+        }
+    }
+    blocks.splice(index, 0, {
+        id: getUUID(false),
+        type: type,
+        content: ''
+    } as LuluInfo)
+    components.value.splice(index, 0, type === 'md' ? markRaw(luluMdBlock) : markRaw(luluCodeBlock))
 }
 </script>
 
@@ -45,7 +62,7 @@ const addEditor = (editor: 'md' | 'code') => {
 .lulu-editor {
     width: 100%;
     background-color: var(--code-background-color);
-
+    overflow: auto;
     .workspace {
         width: 80%;
         margin: 0 auto;

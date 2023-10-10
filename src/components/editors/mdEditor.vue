@@ -40,7 +40,7 @@ let lastContent = ''
 watch(
     () => props.path,
     async (_, oldV) => {
-        await saveFile(oldV)
+        // await saveFile(oldV)
         content.value = props.content
         lastContent = props.content
     }
@@ -96,7 +96,7 @@ const saveFile = async (path: string) => {
 }
 
 onBeforeUnmount(async () => {
-    await saveFile(props.path)
+    // await saveFile(props.path)
 })
 </script>
 

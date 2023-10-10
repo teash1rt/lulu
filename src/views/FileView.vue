@@ -21,9 +21,9 @@ const extension = computed(() => {
     return path.value.split('.').at(-1)
 })
 
-const readFile = async (dir: string) => {
+const readFile = async (pathValue: string) => {
     return await invoke('read_file', {
-        dir: dir
+        path: pathValue
     })
 }
 

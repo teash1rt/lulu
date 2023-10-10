@@ -3,6 +3,7 @@
         <textarea
             v-if="status === 'md'"
             @blur="handleBlur"
+            @focus="handleFocus"
             v-model="content"
             :rows="content.split('\n').length"
             ref="textarea"
@@ -25,6 +26,7 @@ import {
 import type { LuluInfo } from '../../../types/LuluInfo'
 import 'highlight.js/styles/monokai-sublime.css'
 import '../../../styles/markdown.less'
+import { LuluStore } from '../../../stores/LuluStore'
 
 const props = defineProps({
     luluInfo: {
@@ -36,7 +38,11 @@ const props = defineProps({
 const content = ref<string>(props.luluInfo.content)
 const html = ref<string>(render(content.value).html)
 const status = ref<'md' | 'html'>('md')
+const luluStore = LuluStore()
 const handleBlur = () => {
+    setTimeout(() => {
+        luluStore.changeFocus(false, props.luluInfo.id)
+    }, 200)
     if (content.value.trim()) {
         html.value = render(content.value).html
         status.value = 'html'
@@ -45,6 +51,7 @@ const handleBlur = () => {
 
 const textarea = ref<HTMLTextAreaElement | null>(null)
 const handleFocus = () => {
+    luluStore.changeFocus(true, props.luluInfo.id)
     status.value = 'md'
     nextTick(() => {
         textarea.value!.focus()
@@ -107,6 +114,8 @@ const handleBlockquote = (event: KeyboardEvent) => {
         cursor: pointer;
         padding: 5px 10px;
         width: 100%;
+        color: var(--block-font-color);
+
         &:hover {
             box-shadow: 2px 2px 4px 2px rgba(0, 0, 0, 0.2);
         }

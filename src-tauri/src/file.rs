@@ -1,5 +1,3 @@
-use crate::Fof;
-use crate::STATIC_DIR;
 use std::fs::{read_dir, remove_file, rename, File, OpenOptions};
 use std::io::{Read, Write};
 use std::path::Path;
@@ -10,6 +8,21 @@ pub static LEGAL_EXTENSIONS: [&str; 22] = [
     "md", "json", "txt", "css", "js", "ts", "jsx", "tsx", "py", "vue", "rs", "sh", "html", "yaml",
     "xml", "cpp", "c", "go", "java", "less", "sass", "lulu",
 ];
+
+#[derive(Debug, Clone, serde::Serialize)]
+
+// file or folder
+pub struct Fof {
+    name: String,
+    id: String,
+    level: u32,
+    is_dir: bool,
+    file_path: String,
+    extension: String,
+    children: Vec<Fof>,
+}
+
+static mut STATIC_DIR: &str = "";
 
 fn read_folder(path: &Path, mut level: u32) -> Vec<Fof> {
     level += 1;
