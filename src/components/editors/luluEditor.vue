@@ -55,6 +55,9 @@ const addEditor = (type: 'md' | 'code') => {
         content: ''
     } as LuluInfo)
     components.value.splice(index, 0, type === 'md' ? markRaw(luluMdBlock) : markRaw(luluCodeBlock))
+    setTimeout(() => {
+        luluStore.holdFocus()
+    }, 200)
 }
 </script>
 
