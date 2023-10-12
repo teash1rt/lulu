@@ -96,7 +96,7 @@ const saveFile = async (path: string) => {
 }
 
 onBeforeUnmount(async () => {
-    // await saveFile(props.path)
+    await saveFile(props.path)
 })
 </script>
 
