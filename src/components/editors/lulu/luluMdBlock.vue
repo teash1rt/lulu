@@ -37,7 +37,7 @@ const props = defineProps({
 
 const content = ref<string>(props.luluInfo.content)
 const html = ref<string>(render(content.value).html)
-const status = ref<'md' | 'html'>('md')
+const status = ref<'md' | 'html'>('html')
 const luluStore = LuluStore()
 const handleBlur = () => {
     setTimeout(() => {

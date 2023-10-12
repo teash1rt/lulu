@@ -30,12 +30,21 @@ const codeResult = reactive<CodeResult>({
     message: null
 })
 
+monaco.editor.defineTheme('myCustomTheme', {
+    base: 'vs-dark',
+    inherit: true,
+    rules: [],
+    colors: {
+        'editor.background': '#0a0a0a'
+    }
+})
+
 const luluStore = LuluStore()
 const setEditor = (el: HTMLElement) => {
     editor.value = monaco.editor.create(el, {
         value: props.luluInfo.content,
         language: 'typescript',
-        theme: 'vs-dark',
+        theme: 'myCustomTheme',
         roundedSelection: false,
         cursorStyle: 'line',
         automaticLayout: true,
@@ -49,7 +58,8 @@ const setEditor = (el: HTMLElement) => {
             enabled: false
         },
         scrollBeyondLastLine: false,
-        lineNumbers: 'off'
+        lineNumbers: 'off',
+        renderLineHighlight: 'none'
     }) as monaco.editor.IStandaloneCodeEditor
 
     toRaw(editor.value!).layout({

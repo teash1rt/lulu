@@ -110,7 +110,7 @@ onBeforeUnmount(async () => {
         width: calc(100% - 26px);
         height: 100%;
         font-size: 20px;
-        background-color: var(--block-background-color);
+        background-color: var(--code-background-color);
         color: var(--block-font-color);
     }
 }
