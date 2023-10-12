@@ -89,12 +89,12 @@ const deleteEditor = () => {
     overflow: auto;
 
     .editor-navbar {
-        // position: fixed;
+        position: fixed;
         display: block;
     }
     .workspace {
         width: 80%;
-        margin: 0 auto;
+        margin: 20px auto 0;
         display: flex;
         flex-direction: column;
         gap: 20px;

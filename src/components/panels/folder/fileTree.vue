@@ -14,16 +14,11 @@
                     name="down"
                     class="icon"
                     v-else-if="item.is_dir && expandFolder.includes(item.id)" />
-                <svg-icon
-                    name="pound"
-                    class="icon"
-                    v-else-if="item.extension === 'css'"
-                    color="#68b2ea" />
-                <svg-icon
+                <!-- <svg-icon
                     name="markdown"
                     class="icon"
                     v-else-if="item.extension === 'md'"
-                    color="#ffffff" />
+                    color="#ffffff" /> -->
                 {{ item.name }}
             </div>
             <ul class="node-list" v-if="item.children && expandFolder.includes(item.id)">

@@ -3,7 +3,7 @@
         <svg-icon name="start" class="icon" @click="runCode" />
         <div class="editor-box">
             <div class="editor" :ref="setEditor"></div>
-            <div v-if="codeResult.message">{{ codeResult.message }}</div>
+            <div class="code-result" v-if="codeResult.message">{{ codeResult.message }}</div>
         </div>
     </div>
 </template>
@@ -112,6 +112,11 @@ onBeforeUnmount(() => {
         display: flex;
         flex-direction: column;
         width: 100%;
+    }
+
+    .code-result {
+        margin: 5px 0;
+        padding: 0 26px;
     }
 }
 
