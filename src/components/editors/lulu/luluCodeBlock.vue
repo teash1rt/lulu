@@ -44,6 +44,7 @@ const setEditor = (el: HTMLElement) => {
         fontSize: 20,
         quickSuggestionsDelay: 100,
         overviewRulerBorder: false,
+        overviewRulerLanes: 0,
         minimap: {
             enabled: false
         },
@@ -96,17 +97,11 @@ onBeforeUnmount(() => {
     width: 100%;
     display: flex;
     gap: 15px;
-    border: 1px solid rgb(174, 174, 174);
-    background-color: var(--block-background-color);
     color: var(--block-font-color);
     .editor-box {
         display: flex;
         flex-direction: column;
         width: 100%;
-
-        .editor {
-            margin: 14px 0;
-        }
     }
 }
 

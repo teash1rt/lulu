@@ -1,7 +1,10 @@
 <template>
     <div class="lulu-editor">
-        <button @click="addEditor('md')">addMd</button>
-        <button @click="addEditor('code')">addCode</button>
+        <div class="editor-navbar">
+            <button @click="addEditor('md')">addMd</button>
+            <button @click="addEditor('code')">addCode</button>
+            <button @click="deleteEditor">deleteEditor</button>
+        </div>
         <div class="workspace">
             <component
                 v-for="(component, index) in components"
@@ -59,6 +62,24 @@ const addEditor = (type: 'md' | 'code') => {
         luluStore.holdFocus()
     }, 200)
 }
+
+const deleteEditor = () => {
+    if (luluStore.focusId !== null) {
+        let index = -1
+        if (luluStore.focusId !== null) {
+            for (let i = 0; i < blocks.length; i++) {
+                if (luluStore.focusId === blocks[i].id) {
+                    index = i
+                    break
+                }
+            }
+        }
+        if (~index) {
+            blocks.splice(index, 1)
+            components.value.splice(index, 1)
+        }
+    }
+}
 </script>
 
 <style lang="less" scoped>
@@ -66,6 +87,11 @@ const addEditor = (type: 'md' | 'code') => {
     width: 100%;
     background-color: var(--code-background-color);
     overflow: auto;
+
+    .editor-navbar {
+        // position: fixed;
+        display: block;
+    }
     .workspace {
         width: 80%;
         margin: 0 auto;

@@ -4,9 +4,8 @@ use std::path::Path;
 use tauri::command;
 use uuid::Uuid;
 
-pub static LEGAL_EXTENSIONS: [&str; 22] = [
-    "md", "json", "txt", "css", "js", "ts", "jsx", "tsx", "py", "vue", "rs", "sh", "html", "yaml",
-    "xml", "cpp", "c", "go", "java", "less", "sass", "lulu",
+pub static LEGAL_EXTENSIONS: [&str; 2] = [
+    "md", "lulu",
 ];
 
 #[derive(Debug, Clone, serde::Serialize)]

@@ -30,16 +30,7 @@ const readFile = async (pathValue: string) => {
 const component = ref<Raw<typeof mdEditor | typeof luluEditor | typeof codeEditor> | null>(null)
 
 watch(extension, newV => {
-    switch (newV) {
-        case 'md':
-            component.value = markRaw(mdEditor)
-            break
-        case 'lulu':
-            component.value = markRaw(luluEditor)
-            break
-        default:
-            component.value = markRaw(codeEditor)
-    }
+    newV === 'md' ? (component.value = markRaw(mdEditor)) : (component.value = markRaw(luluEditor))
 })
 
 const bus = getCurrentInstance()!.appContext.config.globalProperties.$bus
