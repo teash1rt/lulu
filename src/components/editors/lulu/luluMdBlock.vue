@@ -37,7 +37,7 @@ const props = defineProps({
 
 const content = ref<string>(props.luluInfo.content)
 const html = ref<string>(render(content.value).html)
-const status = ref<'md' | 'html'>('html')
+const status = ref<'md' | 'html'>('md')
 const luluStore = LuluStore()
 const handleBlur = () => {
     setTimeout(() => {
@@ -101,13 +101,18 @@ const handleBlockquote = (event: KeyboardEvent) => {
 
 <style lang="less" scoped>
 .md-editor {
-    margin-left: 51px;
+    margin-left: 37px;
+    display: flex;
 
     textarea {
         width: 100%;
         font-size: 20px;
         background-color: var(--block-background-color);
         color: var(--block-font-color);
+        &:focus {
+            outline: none;
+            box-shadow: none;
+        }
     }
 
     div {

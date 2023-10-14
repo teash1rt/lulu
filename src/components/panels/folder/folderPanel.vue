@@ -1,6 +1,13 @@
 <template>
     <div class="folder-panel">
-        <fileTree :fofInfo="fofInfo" v-if="fileStore.isOpen" />
+        <div v-if="fileStore.isOpen">
+            <div class="options">
+                <svg-icon name="new_file" class="icon" color="#9e9e9e" @click="createFile" />
+                <svg-icon name="new_folder" class="icon" color="#9e9e9e" @click="createFolder" />
+                <svg-icon name="tree" class="icon" color="#9e9e9e" @click="checkOutline" />
+            </div>
+            <fileTree :fofInfo="fofInfo" />
+        </div>
         <div v-else>
             <button class="open-button" @click="openFile">打开文件夹</button>
         </div>
@@ -34,6 +41,12 @@ const openFile = async () => {
     }
 }
 
+const createFile = () => {}
+
+const createFolder = () => {}
+
+const checkOutline = () => {}
+
 onMounted(() => {
     if (fileStore.isOpen) {
         fofInfo.value = fileStore.fofInfo
@@ -54,5 +67,17 @@ onMounted(() => {
         border-radius: 3px;
         cursor: pointer;
     }
+
+    .options {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin: 5px 0 12px;
+    }
+}
+
+.icon {
+    width: 17px;
+    height: 17px;
 }
 </style>

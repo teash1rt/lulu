@@ -11,7 +11,7 @@
                     class="icon"
                     v-if="item.is_dir && !expandFolder.includes(item.id)" />
                 <svg-icon
-                    name="down"
+                    name="down1"
                     class="icon"
                     v-else-if="item.is_dir && expandFolder.includes(item.id)" />
                 <!-- <svg-icon

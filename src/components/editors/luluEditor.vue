@@ -1,9 +1,25 @@
 <template>
     <div class="lulu-editor">
         <div class="editor-navbar">
-            <button @click="addEditor('md')">addMd</button>
-            <button @click="addEditor('code')">addCode</button>
-            <button @click="deleteEditor">deleteEditor</button>
+            <div class="options" v-if="navbarVisible">
+                <div @click="addEditor('code')">+ Code</div>
+                <div @click="addEditor('md')">+ Markdown</div>
+                <div @click="deleteEditor">
+                    <svg-icon name="delete" class="icon" color="#ccc" />
+                </div>
+            </div>
+            <div class="display">
+                <svg-icon
+                    name="up"
+                    class="icon"
+                    @click="navbarVisible = false"
+                    v-if="navbarVisible" />
+                <svg-icon
+                    name="down2"
+                    class="icon"
+                    @click="navbarVisible = true"
+                    v-if="!navbarVisible" />
+            </div>
         </div>
         <div class="workspace">
             <component
@@ -19,9 +35,11 @@
 import { ref, markRaw } from 'vue'
 import luluMdBlock from './lulu/luluMdBlock.vue'
 import luluCodeBlock from './lulu/luluCodeBlock.vue'
-import { LuluInfo } from '../../types/LuluInfo'
+import type { LuluInfo } from '../../types/LuluInfo'
 import { getUUID } from '../../utils/uuid'
 import { LuluStore } from '../../stores/LuluStore'
+
+const navbarVisible = ref<boolean>(true)
 
 const props = defineProps({
     content: {
@@ -90,14 +108,38 @@ const deleteEditor = () => {
 
     .editor-navbar {
         position: fixed;
-        display: block;
+        display: flex;
+        color: var(--block-font-color);
+        padding: 10px;
+        z-index: 100;
+        background-color: var(--code-background-color);
+
+        .options {
+            display: flex;
+        }
+
+        .options div,
+        .display {
+            padding: 5px;
+            margin: 0 5px;
+            cursor: pointer;
+            &:hover {
+                background-color: #3d3e40;
+            }
+        }
     }
     .workspace {
         width: 80%;
-        margin: 20px auto 0;
+        margin: 60px auto 0;
         display: flex;
         flex-direction: column;
         gap: 20px;
     }
+}
+
+.icon {
+    width: 17px;
+    height: 17px;
+    vertical-align: middle;
 }
 </style>

@@ -6,7 +6,6 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-
 const props = defineProps({
     prefix: {
         type: String,
@@ -21,6 +20,7 @@ const props = defineProps({
         default: '#666666'
     }
 })
+console.log(props.color)
 
 const symbolId = computed(() => `#${props.prefix}-${props.name}`)
 </script>
