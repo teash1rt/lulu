@@ -24,30 +24,57 @@ import { listen } from '@tauri-apps/api/event'
 import { FileStore } from '../../../stores/FileStore.ts'
 import type { FofInfo } from '../../../types/FofInfo'
 import { WebviewWindow } from '@tauri-apps/api/window'
+import { CreateFile } from '../../../types/CreateFile'
 
 const fofInfo = ref<FofInfo[]>([])
 const fileStore = FileStore()
 
 const openFile = async () => {
-    const selected = await open({
+    const selected = (await open({
         directory: true,
         multiple: false,
         defaultPath: await homeDir()
-    })
+    })) as string
 
     if (selected) {
-        fofInfo.value = await invoke('open_folder', { dir: selected })
-        fileStore.isOpen = true
-        fileStore.fofInfo = fofInfo.value
+        await getFileData(selected)
     }
+}
+
+const getFileData = async (path: string) => {
+    fofInfo.value = await invoke('open_folder', { dir: path })
+    fileStore.isOpen = true
+    fileStore.fofInfo = fofInfo.value
+    fileStore.openPath = path
 }
 
 const createFile = () => {
     new WebviewWindow('newFile', {
         url: 'windows/newFile/index.html',
-        decorations: false
+        decorations: false,
+        center: true,
+        width: 500,
+        height: 200,
+        resizable: false,
+        alwaysOnTop: true
     })
 }
+
+listen('createFile', async data => {
+    const payload = data.payload as CreateFile
+    let path = ''
+    const lastIndex = fileStore.filePath.lastIndexOf('\\')
+    if (fileStore.filePath === '' || !~lastIndex) {
+        path = fileStore.openPath + '\\' + payload.fileName + '.' + payload.fileType
+    } else {
+        path =
+            fileStore.filePath.slice(0, lastIndex + 1) + payload.fileName + '.' + payload.fileType
+    }
+    await invoke('create_file', {
+        path: path
+    })
+    await getFileData(fileStore.openPath)
+})
 
 const createFolder = () => {}
 

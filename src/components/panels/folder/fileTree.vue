@@ -58,7 +58,7 @@ const fileNodeStyle = (level: number) => {
 
 const router = useRouter()
 const handlePick = async (item: FofInfo) => {
-    fileStore.setFofId(item.id)
+    fileStore.fofId = item.id
 
     if (item.is_dir) {
         let isExpand = false
@@ -73,7 +73,7 @@ const handlePick = async (item: FofInfo) => {
             expandFolder.value.push(item.id)
         }
     } else if (fileStore.filePath !== item.file_path) {
-        fileStore.setFilePath(item.file_path)
+        fileStore.filePath = item.file_path
         if (router.currentRoute.value.name !== 'file') {
             router.push({ name: 'file' })
         }

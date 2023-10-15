@@ -1,20 +1,30 @@
 import { createApp } from '../../../node_modules/vue/dist/vue.esm-browser.js'
-import { invoke } from '../../../node_modules/@tauri-apps/api/tauri.js'
+import { appWindow } from '../../../node_modules/@tauri-apps/api/window'
+import { emit } from '../../../node_modules/@tauri-apps/api/event'
 
 const app = createApp({
     data() {
         return {
+            fileName: null,
             fileType: 'lulu'
         }
     },
     methods: {
-        async confirm() {
-            const res = await invoke('run_code', {
-                code: 'console.log(1)'
-            })
-            console.log(res)
+        confirm() {
+            if (this.fileName !== null) {
+                emit('createFile', {
+                    fileName: this.fileName,
+                    fileType: this.fileType
+                })
+            }
+            this.closeWindow()
         },
-        cancel() {}
+        cancel() {
+            this.closeWindow()
+        },
+        closeWindow() {
+            appWindow.close()
+        }
     }
 })
 

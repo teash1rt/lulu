@@ -1,0 +1,67 @@
+html,
+body {
+    padding: 0;
+    margin: 0;
+}
+
+#app {
+    width: 100vw;
+    height: 100vh;
+    background-color: #000000;
+    color: #ccc;
+}
+
+.navbar {
+    display: flex;
+    padding: 10px 0 0 15px;
+    margin-bottom: 10px;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.icon-box {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 30px;
+    height: 30px;
+}
+
+.icon-box:hover {
+    background-color: #d61425;
+}
+
+.file-name,
+.file-type {
+    margin: 22px auto 22px 20%;
+    display: flex;
+    gap: 30px;
+}
+
+.file-name input:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.btn-group {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+}
+
+.confirm,
+.cancel {
+    cursor: pointer;
+    width: 60px;
+    height: 32px;
+    border: none;
+    border-radius: 5px;
+}
+
+.confirm {
+    background-color: #2975e9;
+    color: #ffffff;
+}
