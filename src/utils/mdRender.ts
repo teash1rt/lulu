@@ -1,6 +1,10 @@
 import MarkdownIt from 'markdown-it'
+import anchor from 'markdown-it-anchor'
+import markdownItTocDoneRight from 'markdown-it-toc-done-right'
 import hljs from 'highlight.js/lib/core'
 import javascript from 'highlight.js/lib/languages/javascript'
+import { emit } from '@tauri-apps/api/event'
+import { BusEvent } from '../types/BusEvent'
 hljs.registerLanguage('javascript', javascript)
 
 const md: MarkdownIt = new MarkdownIt({
@@ -17,6 +21,16 @@ const md: MarkdownIt = new MarkdownIt({
         return '<pre class="hljs">\n<code>\n' + md.utils.escapeHtml(str) + '</code>\n</pre>'
     }
 })
+    .use(anchor, {
+        permalink: true,
+        permalinkBefore: true,
+        permalinkSymbol: '§'
+    } as anchor.AnchorOptions)
+    .use(markdownItTocDoneRight, {
+        callback: html => {
+            emit(BusEvent.GetToc, html)
+        }
+    })
 
 md.inline.ruler.push('lump', (state, silent: boolean) => {
     const src = state.src

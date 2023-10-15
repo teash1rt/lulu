@@ -6,7 +6,8 @@
                 <svg-icon name="new_folder" class="icon" color="#9e9e9e" @click="createFolder" />
                 <svg-icon name="tree" class="icon" color="#9e9e9e" @click="checkOutline" />
             </div>
-            <fileTree :fofInfo="fofInfo" />
+            <fileTree :fofInfo="fofInfo" v-if="mode === 'fileTree'" />
+            <div v-html="outLine" v-else />
         </div>
         <div v-else>
             <button class="open-button" @click="openFile">打开文件夹</button>
@@ -25,9 +26,12 @@ import { FileStore } from '../../../stores/FileStore.ts'
 import type { FofInfo } from '../../../types/FofInfo'
 import { WebviewWindow } from '@tauri-apps/api/window'
 import { CreateFile } from '../../../types/CreateFile'
+import { BusEvent } from '../../../types/BusEvent'
+import { render } from '../../../utils/mdRender'
 
 const fofInfo = ref<FofInfo[]>([])
 const fileStore = FileStore()
+const mode = ref<'fileTree' | 'outLine'>('fileTree')
 
 const openFile = async () => {
     const selected = (await open({
@@ -76,9 +80,24 @@ listen('createFile', async data => {
     await getFileData(fileStore.openPath)
 })
 
+const outLine = ref<string>('')
+listen(BusEvent.GetToc, data => {
+    if (fileStore.filePath.endsWith('.md')) {
+        outLine.value = data.payload as string
+    }
+})
+
 const createFolder = () => {}
 
-const checkOutline = () => {}
+const checkOutline = async () => {
+    if (fileStore.filePath.endsWith('.md')) {
+        mode.value = 'outLine'
+        const mdContent = (await invoke('read_file', {
+            path: fileStore.filePath
+        })) as string
+        render(mdContent)
+    }
+}
 
 onMounted(() => {
     if (fileStore.isOpen) {
@@ -112,5 +131,6 @@ onMounted(() => {
 .icon {
     width: 17px;
     height: 17px;
+    cursor: pointer;
 }
 </style>

@@ -43,7 +43,6 @@ const props = defineProps({
 })
 
 const mode = ref<'text' | 'split' | 'preview'>('text')
-
 const content = ref<string>(props.content)
 const textarea = ref<HTMLTextAreaElement | null>(null)
 
