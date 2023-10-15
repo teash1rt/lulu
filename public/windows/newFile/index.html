@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+    <body>
+        <div id="app">
+            <div class="file-name">
+                文件名称
+                <input />
+            </div>
+            <div class="file-type">
+                文件类型
+                <input type="radio" v-model="fileType" value="lulu" checked /> lulu
+                <input type="radio" v-model="fileType" value="markdown" /> markdown
+            </div>
+            <div class="btn-group">
+                <button @click="confirm">确定</button>
+                <button @click="cancel">取消</button>
+            </div>
+        </div>
+        <script type="module" src="script.ts"></script>
+    </body>
+</html>

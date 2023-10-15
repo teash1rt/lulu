@@ -23,6 +23,7 @@ import fileTree from './fileTree.vue'
 import { listen } from '@tauri-apps/api/event'
 import { FileStore } from '../../../stores/FileStore.ts'
 import type { FofInfo } from '../../../types/FofInfo'
+import { WebviewWindow } from '@tauri-apps/api/window'
 
 const fofInfo = ref<FofInfo[]>([])
 const fileStore = FileStore()
@@ -41,7 +42,12 @@ const openFile = async () => {
     }
 }
 
-const createFile = () => {}
+const createFile = () => {
+    new WebviewWindow('newFile', {
+        url: 'windows/newFile/index.html',
+        decorations: false
+    })
+}
 
 const createFolder = () => {}
 
