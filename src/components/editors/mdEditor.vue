@@ -1,12 +1,19 @@
 <template>
     <div class="md-editor">
+        <div class="options">
+            <svg-icon name="text" class="icon" @click="mode = 'text'" />
+            <svg-icon name="split" class="icon" @click="mode = 'split'" />
+            <svg-icon name="preview" class="icon" @click="mode = 'preview'" />
+        </div>
         <textarea
+            v-if="mode === 'text'"
             v-model="content"
             :rows="content.split('\n').length"
             ref="textarea"
             @keydown.enter.prevent="handleEnter($event)"
             @keydown.tab.prevent="handleTab($event)"
             @keydown.`.prevent="handleBlockquote($event)" />
+        <div v-else-if="mode === 'preview'" class="render" v-html="render(content).html" />
     </div>
 </template>
 
@@ -21,6 +28,8 @@ import {
 import 'highlight.js/styles/monokai-sublime.css'
 import '../../styles/markdown.less'
 import { invoke } from '@tauri-apps/api/tauri'
+import { render } from '../../utils/mdRender'
+import 'highlight.js/styles/monokai-sublime.css'
 
 const props = defineProps({
     content: {
@@ -32,6 +41,8 @@ const props = defineProps({
         required: true
     }
 })
+
+const mode = ref<'text' | 'split' | 'preview'>('text')
 
 const content = ref<string>(props.content)
 const textarea = ref<HTMLTextAreaElement | null>(null)
@@ -104,14 +115,36 @@ onBeforeUnmount(async () => {
 .md-editor {
     width: 100%;
     height: 100%;
-    textarea {
-        padding-left: 26px;
-        display: flex;
-        width: calc(100% - 26px);
-        height: 100%;
+    background-color: var(--code-background-color);
+    color: var(--block-font-color);
+    position: relative;
+    .options {
+        position: absolute;
+        right: 40px;
+        top: 4px;
+    }
+
+    textarea,
+    .render {
+        padding-left: 80px;
+        padding-top: 30px;
+        width: calc(100% - 80px);
+        height: calc(100% - 30px);
         font-size: 20px;
         background-color: var(--code-background-color);
         color: var(--block-font-color);
     }
+
+    textarea {
+        display: flex;
+    }
+    .render {
+        overflow: auto;
+    }
+}
+
+.icon {
+    width: 17px;
+    height: 17px;
 }
 </style>
