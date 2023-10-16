@@ -10,7 +10,6 @@ import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
 import 'virtual:svg-icons-register'
 import svgIcon from './configs/svgIcon.vue'
 import router from './configs/router'
-import bus from './configs/bus'
 
 self.MonacoEnvironment = {
     getWorker(_, label) {
@@ -32,5 +31,4 @@ self.MonacoEnvironment = {
 
 const app = createApp(App)
 app.use(pinia).use(router).component('svg-icon', svgIcon)
-app.config.globalProperties.$bus = bus
 app.mount('#app')

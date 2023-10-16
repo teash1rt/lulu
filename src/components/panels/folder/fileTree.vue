@@ -31,11 +31,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, getCurrentInstance } from 'vue'
+import { ref } from 'vue'
 import { FileStore } from '../../../stores/FileStore.ts'
 import type { FofInfo } from '../../../types/FofInfo.ts'
 import { useRouter } from 'vue-router'
 import { BusEvent } from '../../../types/BusEvent'
+import { emit } from '@tauri-apps/api/event'
 
 const props = defineProps({
     fofInfo: {
@@ -44,7 +45,6 @@ const props = defineProps({
     }
 })
 
-const bus = getCurrentInstance()!.appContext.config.globalProperties.$bus
 const fileStore = FileStore()
 
 // 保存目录树中展开的文件夹
@@ -77,7 +77,7 @@ const handlePick = async (item: FofInfo) => {
         if (router.currentRoute.value.name !== 'file') {
             router.push({ name: 'file' })
         }
-        bus.emit(BusEvent.SwitchFilePath, item.file_path)
+        emit(BusEvent.SwitchFilePath, item.file_path)
     }
 }
 </script>
