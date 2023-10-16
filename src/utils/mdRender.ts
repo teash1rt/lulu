@@ -22,11 +22,14 @@ const md: MarkdownIt = new MarkdownIt({
     }
 })
     .use(anchor, {
-        permalink: true,
-        permalinkBefore: true,
-        permalinkSymbol: '§'
-    } as anchor.AnchorOptions)
+        permalink: false,
+        permalinkBefore: false
+    })
     .use(markdownItTocDoneRight, {
+        containerClass: 'toc',
+        listType: 'ul',
+        listClass: 'toc-list',
+        linkClass: 'toc-link',
         callback: html => {
             emit(BusEvent.GetToc, html)
         }

@@ -2,9 +2,21 @@
     <div class="folder-panel">
         <div v-if="fileStore.isOpen">
             <div class="options">
+                <svg-icon name="change" class="icon" color="#9e9e9e" @click="openFile" />
                 <svg-icon name="new_file" class="icon" color="#9e9e9e" @click="createFile" />
                 <svg-icon name="new_folder" class="icon" color="#9e9e9e" @click="createFolder" />
-                <svg-icon name="tree" class="icon" color="#9e9e9e" @click="checkOutline" />
+                <svg-icon
+                    name="tree"
+                    class="icon"
+                    color="#9e9e9e"
+                    @click="checkOutline"
+                    v-if="mode === 'fileTree'" />
+                <svg-icon
+                    name="return"
+                    class="icon"
+                    color="#9e9e9e"
+                    @click="mode = 'fileTree'"
+                    v-else />
             </div>
             <fileTree :fofInfo="fofInfo" v-if="mode === 'fileTree'" />
             <div v-html="outLine" v-else />

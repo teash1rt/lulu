@@ -119,8 +119,11 @@ onBeforeUnmount(async () => {
     position: relative;
     .options {
         position: absolute;
-        right: 40px;
-        top: 4px;
+        left: 3px;
+        top: 3px;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
     }
 
     textarea,
@@ -143,7 +146,7 @@ onBeforeUnmount(async () => {
 }
 
 .icon {
-    width: 17px;
-    height: 17px;
+    width: 20px;
+    height: 20px;
 }
 </style>
