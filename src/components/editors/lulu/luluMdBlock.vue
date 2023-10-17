@@ -4,8 +4,8 @@
             v-if="status === 'md'"
             @blur="handleBlur"
             @focus="handleFocus"
+            @input="handleInput"
             v-model="content"
-            :rows="content.split('\n').length"
             ref="textarea"
             @keydown.enter.prevent="handleEnter($event)"
             @keydown.tab.prevent="handleTab($event)"
@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, PropType } from 'vue'
+import { ref, nextTick, PropType, onMounted } from 'vue'
 import { render } from '../../../utils/mdRender.ts'
 import {
     getLineScope,
@@ -55,6 +55,7 @@ const handleFocus = () => {
     status.value = 'md'
     nextTick(() => {
         textarea.value!.focus()
+        handleInput()
     })
 }
 
@@ -70,6 +71,7 @@ const handleEnter = (event: KeyboardEvent) => {
     lastLine = content.value.slice(l, pos)
     nextTick(() => {
         target.selectionEnd = pos + bias + 1
+        handleInput()
     })
 }
 
@@ -97,6 +99,24 @@ const handleBlockquote = (event: KeyboardEvent) => {
         target.selectionEnd = pos + 1
     })
 }
+
+const handleInput = () => {
+    console.log('p')
+    textarea.value!.style.height = 'auto'
+    textarea.value!.style.height = textarea.value!.scrollHeight + 'px'
+}
+
+onMounted(() => {
+    handleInput()
+})
+
+const getContent = () => {
+    return content.value
+}
+
+defineExpose({
+    getContent
+})
 </script>
 
 <style lang="less" scoped>
@@ -105,6 +125,8 @@ const handleBlockquote = (event: KeyboardEvent) => {
     display: flex;
 
     textarea {
+        padding: 15px 28px 0 28px;
+        word-wrap: break-word;
         width: 100%;
         font-size: 20px;
         background-color: var(--block-background-color);
@@ -120,6 +142,7 @@ const handleBlockquote = (event: KeyboardEvent) => {
         padding: 5px 10px;
         width: 100%;
         color: var(--block-font-color);
+        word-wrap: break-word;
 
         &:hover {
             box-shadow: 2px 2px 4px 2px rgba(0, 0, 0, 0.2);

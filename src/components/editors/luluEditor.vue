@@ -26,18 +26,25 @@
                 v-for="(component, index) in components"
                 :key="blocks[index].id"
                 :is="component"
-                :luluInfo="blocks[index]" />
+                :luluInfo="blocks[index]"
+                :ref="
+                    ref =>
+                        (luluRef[index] = ref as unknown as
+                            | typeof luluMdBlock
+                            | typeof luluCodeBlock)
+                " />
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, markRaw } from 'vue'
+import { ref, markRaw, watch, onBeforeUnmount } from 'vue'
 import luluMdBlock from './lulu/luluMdBlock.vue'
 import luluCodeBlock from './lulu/luluCodeBlock.vue'
 import type { LuluInfo } from '../../types/LuluInfo'
 import { getUUID } from '../../utils/uuid'
 import { LuluStore } from '../../stores/LuluStore'
+import { invoke } from '@tauri-apps/api/tauri'
 
 const navbarVisible = ref<boolean>(true)
 
@@ -52,25 +59,33 @@ const props = defineProps({
     }
 })
 
+const luluRef = ref<Array<typeof luluMdBlock | typeof luluCodeBlock> | []>([])
 const components = ref<Array<typeof luluMdBlock | typeof luluCodeBlock>>([])
-const blocks: LuluInfo[] = JSON.parse(props.content).blocks
+const blocks = ref<LuluInfo[]>([])
 
-for (let block of blocks) {
-    components.value.push(block.type === 'md' ? markRaw(luluMdBlock) : markRaw(luluCodeBlock))
+const init = () => {
+    luluRef.value = []
+    components.value = []
+    blocks.value = JSON.parse(props.content).blocks
+    for (let block of blocks.value) {
+        components.value.push(block.type === 'md' ? markRaw(luluMdBlock) : markRaw(luluCodeBlock))
+    }
 }
+
+init()
 
 const luluStore = LuluStore()
 const addEditor = (type: 'md' | 'code') => {
-    let index = blocks.length
+    let index = blocks.value.length
     if (luluStore.focusId !== null) {
-        for (let i = 0; i < blocks.length; i++) {
-            if (luluStore.focusId === blocks[i].id) {
+        for (let i = 0; i < blocks.value.length; i++) {
+            if (luluStore.focusId === blocks.value[i].id) {
                 index = i + 1
                 break
             }
         }
     }
-    blocks.splice(index, 0, {
+    blocks.value.splice(index, 0, {
         id: getUUID(false),
         type: type,
         content: ''
@@ -85,24 +100,55 @@ const deleteEditor = () => {
     if (luluStore.focusId !== null) {
         let index = -1
         if (luluStore.focusId !== null) {
-            for (let i = 0; i < blocks.length; i++) {
-                if (luluStore.focusId === blocks[i].id) {
+            for (let i = 0; i < blocks.value.length; i++) {
+                if (luluStore.focusId === blocks.value[i].id) {
                     index = i
                     break
                 }
             }
         }
         if (~index) {
-            blocks.splice(index, 1)
+            blocks.value.splice(index, 1)
             components.value.splice(index, 1)
         }
     }
 }
+
+const saveFile = async (path: string) => {
+    const content = {
+        blocks: [] as LuluInfo[]
+    }
+    for (let i = 0; i < blocks.value.length; i++) {
+        const blockContent = luluRef.value[i].getContent()
+        content.blocks.push({
+            id: blocks.value[i].id,
+            type: blocks.value[i].type,
+            content: blockContent
+        })
+    }
+    await invoke('write_file', {
+        path: path,
+        text: JSON.stringify(content)
+    })
+}
+
+watch(
+    () => props.path,
+    async (_, oldV) => {
+        await saveFile(oldV)
+        init()
+    }
+)
+
+onBeforeUnmount(async () => {
+    await saveFile(props.path)
+})
 </script>
 
 <style lang="less" scoped>
 .lulu-editor {
     width: 100%;
+    min-width: 750px;
     background-color: var(--code-background-color);
     overflow: auto;
 

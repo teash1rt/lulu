@@ -13,7 +13,11 @@
             @keydown.enter.prevent="handleEnter($event)"
             @keydown.tab.prevent="handleTab($event)"
             @keydown.`.prevent="handleBlockquote($event)" />
-        <div v-else-if="mode === 'preview'" class="render" v-html="render(content).html" />
+        <div
+            v-else-if="mode === 'preview'"
+            class="render"
+            v-html="render(content).html"
+            @dblclick="mode = 'text'" />
     </div>
 </template>
 
@@ -29,7 +33,6 @@ import 'highlight.js/styles/monokai-sublime.css'
 import '../../styles/markdown.less'
 import { invoke } from '@tauri-apps/api/tauri'
 import { render } from '../../utils/mdRender'
-import 'highlight.js/styles/monokai-sublime.css'
 
 const props = defineProps({
     content: {
@@ -45,16 +48,6 @@ const props = defineProps({
 const mode = ref<'text' | 'split' | 'preview'>('text')
 const content = ref<string>(props.content)
 const textarea = ref<HTMLTextAreaElement | null>(null)
-
-let lastContent = ''
-watch(
-    () => props.path,
-    async (_, oldV) => {
-        // await saveFile(oldV)
-        content.value = props.content
-        lastContent = props.content
-    }
-)
 
 let lastLine: string | null = null
 const handleEnter = (event: KeyboardEvent) => {
@@ -96,17 +89,27 @@ const handleBlockquote = (event: KeyboardEvent) => {
     })
 }
 
+let lastContent = ''
+watch(
+    () => props.path,
+    async (_, oldV) => {
+        await saveFile(oldV)
+        content.value = props.content
+        lastContent = props.content
+    }
+)
+
 const saveFile = async (path: string) => {
     if (content.value !== lastContent) {
         await invoke('write_file', {
-            dir: path,
+            path: path,
             text: content.value
         })
     }
 }
 
 onBeforeUnmount(async () => {
-    // await saveFile(props.path)
+    await saveFile(props.path)
 })
 </script>
 
@@ -119,8 +122,8 @@ onBeforeUnmount(async () => {
     position: relative;
     .options {
         position: absolute;
-        left: 3px;
-        top: 3px;
+        right: 25px;
+        top: 5px;
         display: flex;
         flex-direction: column;
         gap: 2px;
@@ -128,9 +131,8 @@ onBeforeUnmount(async () => {
 
     textarea,
     .render {
-        padding-left: 80px;
-        padding-top: 30px;
-        width: calc(100% - 80px);
+        padding: 30px 40px 0 60px;
+        width: calc(100% - 100px);
         height: calc(100% - 30px);
         font-size: 20px;
         background-color: var(--code-background-color);
@@ -141,7 +143,8 @@ onBeforeUnmount(async () => {
         display: flex;
     }
     .render {
-        overflow: auto;
+        overflow-y: auto;
+        word-wrap: break-word;
     }
 }
 

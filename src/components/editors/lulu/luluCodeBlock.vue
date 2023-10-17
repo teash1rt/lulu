@@ -63,7 +63,10 @@ const setEditor = (el: HTMLElement) => {
     }) as monaco.editor.IStandaloneCodeEditor
 
     toRaw(editor.value!).layout({
-        height: monaco.editor.EditorOption.lineHeight,
+        height:
+            editor.value!.getOption(monaco.editor.EditorOption.lineHeight) *
+                editor.value!.getModel()!.getLineCount() +
+            20,
         width: editor.value.getLayoutInfo().width
     })
 
@@ -97,6 +100,14 @@ const runCode = async () => {
     codeResult.message = res.message
 }
 
+const getContent = () => {
+    return toRaw(editor.value)?.getValue()!
+}
+
+defineExpose({
+    getContent
+})
+
 onBeforeUnmount(() => {
     toRaw(editor.value!).dispose()
 })
@@ -111,7 +122,7 @@ onBeforeUnmount(() => {
     .editor-box {
         display: flex;
         flex-direction: column;
-        width: 100%;
+        width: calc(100% - 35px);
     }
 
     .code-result {
@@ -121,6 +132,7 @@ onBeforeUnmount(() => {
 }
 
 .icon {
+    display: flex;
     width: 20px;
     height: 20px;
 }

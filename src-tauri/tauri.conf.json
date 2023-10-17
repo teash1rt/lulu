@@ -39,7 +39,9 @@
                 "resizable": true,
                 "title": "lulu",
                 "width": 1200,
+                "minWidth": 700,
                 "height": 800,
+                "minHeight": 400,
                 "center": true,
                 "decorations": false
             }
