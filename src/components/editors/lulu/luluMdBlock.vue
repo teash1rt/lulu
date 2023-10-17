@@ -101,7 +101,6 @@ const handleBlockquote = (event: KeyboardEvent) => {
 }
 
 const handleInput = () => {
-    console.log('p')
     textarea.value!.style.height = 'auto'
     textarea.value!.style.height = textarea.value!.scrollHeight + 'px'
 }
