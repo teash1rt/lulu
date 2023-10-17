@@ -7,18 +7,8 @@ export const FileStore = defineStore('FileStore', {
             isOpen: false,
             fofId: '',
             filePath: '',
-            fofInfo: [] as FofInfo[]
-        }
-    },
-    actions: {
-        setFofId(newFofId: string) {
-            this.fofId = newFofId
-        },
-        setFilePath(newFilePath: string) {
-            this.filePath = newFilePath
-        },
-        setFofInfo(newFofInfo: []) {
-            this.fofInfo = newFofInfo
+            fofInfo: [] as FofInfo[],
+            openPath: ''
         }
     }
 })

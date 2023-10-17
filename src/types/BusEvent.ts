@@ -1,4 +1,5 @@
 export enum BusEvent {
     SwitchFilePath = 'SwitchFilePath',
-    SaveFile = 'SaveFile'
+    SaveFile = 'SaveFile',
+    GetToc = 'GetToc'
 }

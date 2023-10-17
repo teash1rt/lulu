@@ -1,15 +1,8 @@
 <template>
     <div class="side-bar">
         <div class="bar">
-            <div class="option folder" @click="handlePick(markRaw(folderPanel))">
-                <svg-icon name="folder" class="icon" />
-            </div>
-            <div class="option outline">
-                <svg-icon name="tree" class="icon" />
-            </div>
-            <div class="option kanban">
-                <svg-icon name="kanban" class="icon" />
-            </div>
+            <svg-icon name="folder" class="icon" @click="handlePick(markRaw(folderPanel))" />
+            <svg-icon name="kanban" class="icon" />
         </div>
         <div class="panel" v-show="expandComponent">
             <keep-alive>
@@ -26,7 +19,7 @@ import folderPanel from '../panels/folder/folderPanel.vue'
 
 const expandComponent = ref<Raw<typeof folderPanel> | null>(null)
 
-const handlePick = (component: Raw<any>) => {
+const handlePick = (component: Raw<typeof folderPanel>) => {
     expandComponent.value = expandComponent.value ? null : component
 }
 </script>
@@ -43,15 +36,11 @@ const handlePick = (component: Raw<any>) => {
         width: 50px;
         gap: 30px;
 
-        .option {
-            display: flex;
-
-            .icon {
-                margin: 0 auto;
-                width: 30px;
-                height: 30px;
-                cursor: pointer;
-            }
+        .icon {
+            margin: 0 auto;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
         }
     }
 

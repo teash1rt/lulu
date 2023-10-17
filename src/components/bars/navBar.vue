@@ -9,7 +9,7 @@
         </div>
         <div class="button-group">
             <div @click="minimizeWindow">
-                <svg-icon name="minimize" class="icon" fill="#ffff00" />
+                <svg-icon name="minimize" class="icon" />
             </div>
             <div @click="maximizeWindow">
                 <svg-icon name="maximize" class="icon" />

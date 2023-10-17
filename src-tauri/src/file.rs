@@ -4,9 +4,7 @@ use std::path::Path;
 use tauri::command;
 use uuid::Uuid;
 
-pub static LEGAL_EXTENSIONS: [&str; 2] = [
-    "md", "lulu",
-];
+pub static LEGAL_EXTENSIONS: [&str; 2] = ["md", "lulu"];
 
 #[derive(Debug, Clone, serde::Serialize)]
 
@@ -95,7 +93,10 @@ pub fn write_file(path: String, text: String) {
 
 #[command]
 pub fn create_file(path: String) {
-    File::create(path).unwrap();
+    File::create(&path).unwrap();
+    if path.split('.').last().unwrap() == "lulu" {
+        write_file(path, "{\"blocks\": []}".to_string());
+    }
 }
 
 #[command]

@@ -11,19 +11,14 @@
                     class="icon"
                     v-if="item.is_dir && !expandFolder.includes(item.id)" />
                 <svg-icon
-                    name="down"
+                    name="down1"
                     class="icon"
                     v-else-if="item.is_dir && expandFolder.includes(item.id)" />
-                <svg-icon
-                    name="pound"
-                    class="icon"
-                    v-else-if="item.extension === 'css'"
-                    color="#68b2ea" />
-                <svg-icon
+                <!-- <svg-icon
                     name="markdown"
                     class="icon"
                     v-else-if="item.extension === 'md'"
-                    color="#ffffff" />
+                    color="#ffffff" /> -->
                 {{ item.name }}
             </div>
             <ul class="node-list" v-if="item.children && expandFolder.includes(item.id)">
@@ -36,11 +31,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, getCurrentInstance } from 'vue'
+import { ref } from 'vue'
 import { FileStore } from '../../../stores/FileStore.ts'
 import type { FofInfo } from '../../../types/FofInfo.ts'
 import { useRouter } from 'vue-router'
 import { BusEvent } from '../../../types/BusEvent'
+import { emit } from '@tauri-apps/api/event'
 
 const props = defineProps({
     fofInfo: {
@@ -49,7 +45,6 @@ const props = defineProps({
     }
 })
 
-const bus = getCurrentInstance()!.appContext.config.globalProperties.$bus
 const fileStore = FileStore()
 
 // 保存目录树中展开的文件夹
@@ -63,7 +58,7 @@ const fileNodeStyle = (level: number) => {
 
 const router = useRouter()
 const handlePick = async (item: FofInfo) => {
-    fileStore.setFofId(item.id)
+    fileStore.fofId = item.id
 
     if (item.is_dir) {
         let isExpand = false
@@ -78,11 +73,11 @@ const handlePick = async (item: FofInfo) => {
             expandFolder.value.push(item.id)
         }
     } else if (fileStore.filePath !== item.file_path) {
-        fileStore.setFilePath(item.file_path)
+        fileStore.filePath = item.file_path
         if (router.currentRoute.value.name !== 'file') {
             router.push({ name: 'file' })
         }
-        bus.emit(BusEvent.SwitchFilePath, item.file_path)
+        emit(BusEvent.SwitchFilePath, item.file_path)
     }
 }
 </script>

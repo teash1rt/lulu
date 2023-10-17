@@ -3,7 +3,7 @@
         <svg-icon name="start" class="icon" @click="runCode" />
         <div class="editor-box">
             <div class="editor" :ref="setEditor"></div>
-            <div v-if="codeResult.message">{{ codeResult.message }}</div>
+            <div class="code-result" v-if="codeResult.message">{{ codeResult.message }}</div>
         </div>
     </div>
 </template>
@@ -30,12 +30,21 @@ const codeResult = reactive<CodeResult>({
     message: null
 })
 
+monaco.editor.defineTheme('myCustomTheme', {
+    base: 'vs-dark',
+    inherit: true,
+    rules: [],
+    colors: {
+        'editor.background': '#0a0a0a'
+    }
+})
+
 const luluStore = LuluStore()
 const setEditor = (el: HTMLElement) => {
     editor.value = monaco.editor.create(el, {
         value: props.luluInfo.content,
         language: 'typescript',
-        theme: 'vs-dark',
+        theme: 'myCustomTheme',
         roundedSelection: false,
         cursorStyle: 'line',
         automaticLayout: true,
@@ -49,11 +58,15 @@ const setEditor = (el: HTMLElement) => {
             enabled: false
         },
         scrollBeyondLastLine: false,
-        lineNumbers: 'off'
+        lineNumbers: 'off',
+        renderLineHighlight: 'none'
     }) as monaco.editor.IStandaloneCodeEditor
 
     toRaw(editor.value!).layout({
-        height: monaco.editor.EditorOption.lineHeight,
+        height:
+            editor.value!.getOption(monaco.editor.EditorOption.lineHeight) *
+                editor.value!.getModel()!.getLineCount() +
+            20,
         width: editor.value.getLayoutInfo().width
     })
 
@@ -87,6 +100,14 @@ const runCode = async () => {
     codeResult.message = res.message
 }
 
+const getContent = () => {
+    return toRaw(editor.value)?.getValue()!
+}
+
+defineExpose({
+    getContent
+})
+
 onBeforeUnmount(() => {
     toRaw(editor.value!).dispose()
 })
@@ -101,11 +122,17 @@ onBeforeUnmount(() => {
     .editor-box {
         display: flex;
         flex-direction: column;
-        width: 100%;
+        width: calc(100% - 35px);
+    }
+
+    .code-result {
+        margin: 5px 0;
+        padding: 0 26px;
     }
 }
 
 .icon {
+    display: flex;
     width: 20px;
     height: 20px;
 }

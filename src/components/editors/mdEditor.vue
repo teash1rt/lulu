@@ -1,12 +1,23 @@
 <template>
     <div class="md-editor">
+        <div class="options">
+            <svg-icon name="text" class="icon" @click="mode = 'text'" />
+            <svg-icon name="split" class="icon" @click="mode = 'split'" />
+            <svg-icon name="preview" class="icon" @click="mode = 'preview'" />
+        </div>
         <textarea
+            v-if="mode === 'text'"
             v-model="content"
             :rows="content.split('\n').length"
             ref="textarea"
             @keydown.enter.prevent="handleEnter($event)"
             @keydown.tab.prevent="handleTab($event)"
             @keydown.`.prevent="handleBlockquote($event)" />
+        <div
+            v-else-if="mode === 'preview'"
+            class="render"
+            v-html="render(content).html"
+            @dblclick="mode = 'text'" />
     </div>
 </template>
 
@@ -21,6 +32,7 @@ import {
 import 'highlight.js/styles/monokai-sublime.css'
 import '../../styles/markdown.less'
 import { invoke } from '@tauri-apps/api/tauri'
+import { render } from '../../utils/mdRender'
 
 const props = defineProps({
     content: {
@@ -33,18 +45,9 @@ const props = defineProps({
     }
 })
 
+const mode = ref<'text' | 'split' | 'preview'>('text')
 const content = ref<string>(props.content)
 const textarea = ref<HTMLTextAreaElement | null>(null)
-
-let lastContent = ''
-watch(
-    () => props.path,
-    async (_, oldV) => {
-        // await saveFile(oldV)
-        content.value = props.content
-        lastContent = props.content
-    }
-)
 
 let lastLine: string | null = null
 const handleEnter = (event: KeyboardEvent) => {
@@ -86,10 +89,20 @@ const handleBlockquote = (event: KeyboardEvent) => {
     })
 }
 
+let lastContent = ''
+watch(
+    () => props.path,
+    async (_, oldV) => {
+        await saveFile(oldV)
+        content.value = props.content
+        lastContent = props.content
+    }
+)
+
 const saveFile = async (path: string) => {
     if (content.value !== lastContent) {
         await invoke('write_file', {
-            dir: path,
+            path: path,
             text: content.value
         })
     }
@@ -104,14 +117,39 @@ onBeforeUnmount(async () => {
 .md-editor {
     width: 100%;
     height: 100%;
-    textarea {
-        padding-left: 26px;
+    background-color: var(--code-background-color);
+    color: var(--block-font-color);
+    position: relative;
+    .options {
+        position: absolute;
+        right: 25px;
+        top: 5px;
         display: flex;
-        width: calc(100% - 26px);
-        height: 100%;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    textarea,
+    .render {
+        padding: 30px 40px 0 60px;
+        width: calc(100% - 100px);
+        height: calc(100% - 30px);
         font-size: 20px;
-        background-color: var(--block-background-color);
+        background-color: var(--code-background-color);
         color: var(--block-font-color);
     }
+
+    textarea {
+        display: flex;
+    }
+    .render {
+        overflow-y: auto;
+        word-wrap: break-word;
+    }
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
 }
 </style>

@@ -1,4 +1,18 @@
-@import './var.less';
+@font-face {
+    font-family: 'calibri';
+    src: url('./CALIBRI.TTF') format('truetype');
+}
+
+@font-face {
+    font-family: 'consola';
+    src: url('./CONSOLA.TTF') format('truetype');
+}
+
+:root {
+    --code-background-color: #1e1e1e;
+    --block-background-color: #0a0a0a;
+    --block-font-color: #d4d4d4;
+}
 
 * {
     margin: 0;
@@ -27,10 +41,23 @@
 
 li {
     list-style-position: inside;
+    margin-left: 10px;
 }
 
 textarea {
     font-family: consola;
     resize: none;
     border: 0;
+}
+
+// TOC 目录样式
+.toc {
+    &-list {
+        color: var(--block-font-color);
+    }
+
+    &-link {
+        text-decoration: none;
+        color: var(--block-font-color);
+    }
 }
