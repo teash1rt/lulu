@@ -1,7 +1,11 @@
 <template>
-    <div class="lulu-code-editor">
+    <div class="code-editor">
         <div class="tag">
-            <svg-icon name="start" class="icon" @click="runCode" v-if="status !== 'isRunning'" />
+            <svg-icon
+                name="start"
+                class="icon"
+                @click="runCode"
+                v-if="status !== 'isRunning'" />
             <svg-icon name="stop" class="icon" @click="runCode" v-else />
         </div>
         <div class="editor-box">
@@ -118,17 +122,12 @@ const runCode = async () => {
     status.value = 'afterRunning'
 }
 
-const clearOutput = () => {
-    status.value = 'beforeRunning'
-}
-
 const getContent = () => {
     return toRaw(editor.value)?.getValue()!
 }
 
 defineExpose({
-    getContent,
-    clearOutput
+    getContent
 })
 
 onBeforeUnmount(() => {
@@ -137,10 +136,11 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="less" scoped>
-.lulu-code-editor {
+.code-editor {
     width: 100%;
     display: flex;
     gap: 15px;
+    color: var(--block-font-color);
 
     .tag {
         margin-top: 6px;
