@@ -1,7 +1,11 @@
 <template>
-    <div class="lulu-code-editor">
+    <div class="code-editor">
         <div class="tag">
-            <svg-icon name="start" class="icon" @click="runCode" v-if="status !== 'isRunning'" />
+            <svg-icon
+                name="start"
+                class="icon"
+                @click="runCode"
+                v-if="status !== 'isRunning'" />
             <svg-icon name="stop" class="icon" @click="runCode" v-else />
         </div>
         <div class="editor-box">
@@ -132,7 +136,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="less" scoped>
-.lulu-code-editor {
+.code-editor {
     width: 100%;
     display: flex;
     gap: 15px;
