@@ -1,11 +1,15 @@
 <template>
-    <div class="lulu-code-editor">
+    <div class="code-editor">
         <div class="tag">
-            <svg-icon name="start" class="icon" @click="runCode" v-if="status !== 'isRunning'" />
+            <svg-icon
+                name="start"
+                class="icon"
+                @click="runCode"
+                v-if="status !== 'isRunning'" />
             <svg-icon name="stop" class="icon" @click="runCode" v-else />
         </div>
         <div class="editor-box">
-            <div :id="props.luluInfo.id" ref="editorRef"></div>
+            <div class="editor" :ref="setEditor"></div>
             <div class="code-result" v-if="status === 'afterRunning'">
                 <div class="info">
                     <svg-icon
@@ -24,7 +28,7 @@
 
 <script setup lang="ts">
 import * as monaco from 'monaco-editor'
-import { ref, toRaw, onBeforeUnmount, reactive, PropType, onMounted } from 'vue'
+import { ref, toRaw, onBeforeUnmount, reactive, PropType } from 'vue'
 import { invoke } from '@tauri-apps/api/tauri'
 import type { CodeResult } from '../../../types/CodeResult'
 import type { LuluInfo } from '../../../types/LuluInfo'
@@ -38,7 +42,6 @@ const props = defineProps({
 })
 
 const editor = ref<monaco.editor.IStandaloneCodeEditor | null>(null)
-const editorRef = ref<HTMLDivElement | null>(null)
 
 const codeResult = reactive<CodeResult>({
     status: 'success',
@@ -56,8 +59,8 @@ monaco.editor.defineTheme('myCustomTheme', {
 })
 
 const luluStore = LuluStore()
-onMounted(() => {
-    editor.value = monaco.editor.create(editorRef.value!, {
+const setEditor = (el: HTMLElement) => {
+    editor.value = monaco.editor.create(el, {
         value: props.luluInfo.content,
         language: 'typescript',
         theme: 'myCustomTheme',
@@ -105,7 +108,8 @@ onMounted(() => {
             luluStore.changeFocus(false, props.luluInfo.id)
         }, 200)
     })
-})
+    return editor
+}
 
 const status = ref<'beforeRunning' | 'isRunning' | 'afterRunning'>('beforeRunning')
 const runCode = async () => {
@@ -118,17 +122,12 @@ const runCode = async () => {
     status.value = 'afterRunning'
 }
 
-const clearOutput = () => {
-    status.value = 'beforeRunning'
-}
-
 const getContent = () => {
-    return toRaw(editor.value)!.getValue()
+    return toRaw(editor.value)?.getValue()!
 }
 
 defineExpose({
-    getContent,
-    clearOutput
+    getContent
 })
 
 onBeforeUnmount(() => {
@@ -137,10 +136,11 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="less" scoped>
-.lulu-code-editor {
+.code-editor {
     width: 100%;
     display: flex;
     gap: 15px;
+    color: var(--block-font-color);
 
     .tag {
         margin-top: 6px;
