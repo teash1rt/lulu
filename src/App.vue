@@ -22,10 +22,11 @@ import navBar from './components/bars/navBar.vue'
     width: 100%;
     .nav-bar {
         height: 40px;
+        border-bottom: 1px solid #30363d;
     }
 
     .container {
-        height: calc(100vh - 40px);
+        height: calc(100vh - 41px);
         flex: 1;
         display: flex;
 
