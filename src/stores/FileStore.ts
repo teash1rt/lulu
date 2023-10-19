@@ -5,10 +5,10 @@ export const FileStore = defineStore('FileStore', {
     state: () => {
         return {
             isOpen: false,
-            fofId: '',
             filePath: '',
             fofInfo: [] as FofInfo[],
-            openPath: ''
+            openPath: '',
+            lastSelect: null as null | FofInfo
         }
     }
 })
