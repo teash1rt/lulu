@@ -37,9 +37,10 @@ import { listen } from '@tauri-apps/api/event'
 import { FileStore } from '../../../stores/FileStore.ts'
 import type { FofInfo } from '../../../types/FofInfo'
 import { WebviewWindow } from '@tauri-apps/api/window'
-import { CreateFile } from '../../../types/CreateFile'
+import type { CreateFile } from '../../../types/CreateFile'
 import { BusEvent } from '../../../types/BusEvent'
 import { render } from '../../../utils/mdRender'
+import type { CreateFolder } from '../../../types/CreateFolder'
 
 const fofInfo = ref<FofInfo[]>([])
 const fileStore = FileStore()
@@ -79,12 +80,18 @@ const createFile = () => {
 listen('createFile', async data => {
     const payload = data.payload as CreateFile
     let path = ''
-    const lastIndex = fileStore.filePath.lastIndexOf('\\')
-    if (fileStore.filePath === '' || !~lastIndex) {
+
+    if (fileStore.lastSelect === null) {
         path = fileStore.openPath + '\\' + payload.fileName + '.' + payload.fileType
+    } else if (fileStore.lastSelect.is_dir) {
+        path = fileStore.lastSelect.file_path + '\\' + payload.fileName + '.' + payload.fileType
     } else {
+        const lastIndex = fileStore.lastSelect.file_path.lastIndexOf('\\')
         path =
-            fileStore.filePath.slice(0, lastIndex + 1) + payload.fileName + '.' + payload.fileType
+            fileStore.lastSelect.file_path.slice(0, lastIndex + 1) +
+            payload.fileName +
+            '.' +
+            payload.fileType
     }
     await invoke('create_file', {
         path: path
@@ -92,14 +99,34 @@ listen('createFile', async data => {
     await getFileData(fileStore.openPath)
 })
 
-const outLine = ref<string>('')
-listen(BusEvent.GetToc, data => {
-    if (fileStore.filePath.endsWith('.md')) {
-        outLine.value = data.payload as string
-    }
-})
+const createFolder = () => {
+    new WebviewWindow('newFolder', {
+        url: 'windows/newFolder/index.html',
+        decorations: false,
+        center: true,
+        width: 500,
+        height: 170,
+        resizable: false,
+        alwaysOnTop: true
+    })
+}
 
-const createFolder = () => {}
+listen('createFolder', async data => {
+    const payload = data.payload as CreateFolder
+    let path = ''
+    if (fileStore.lastSelect === null) {
+        path = fileStore.openPath + '\\' + payload.folderName
+    } else if (fileStore.lastSelect.is_dir) {
+        path = fileStore.lastSelect.file_path + '\\' + payload.folderName
+    } else {
+        const lastIndex = fileStore.lastSelect.file_path.lastIndexOf('\\')
+        path = fileStore.lastSelect.file_path.slice(0, lastIndex) + payload.folderName
+    }
+    await invoke('create_folder', {
+        path: path
+    })
+    await getFileData(fileStore.openPath)
+})
 
 const checkOutline = async () => {
     if (fileStore.filePath.endsWith('.md')) {
@@ -110,6 +137,13 @@ const checkOutline = async () => {
         render(mdContent)
     }
 }
+
+const outLine = ref<string>('')
+listen(BusEvent.GetToc, data => {
+    if (fileStore.filePath.endsWith('.md')) {
+        outLine.value = data.payload as string
+    }
+})
 
 onMounted(() => {
     if (fileStore.isOpen) {

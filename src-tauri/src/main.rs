@@ -3,7 +3,9 @@
     windows_subsystem = "windows"
 )]
 
-use file::{create_file, delete_file, open_folder, read_file, rename_file, write_file};
+use file::{
+    create_file, create_folder, delete_file, open_folder, read_file, rename_file, write_file,
+};
 mod file;
 
 use runner::run_code;
@@ -17,6 +19,7 @@ fn main() {
             write_file,
             run_code,
             create_file,
+            create_folder,
             delete_file,
             rename_file
         ])

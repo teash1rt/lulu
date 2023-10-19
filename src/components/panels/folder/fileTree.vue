@@ -4,7 +4,11 @@
             <div
                 class="file-node"
                 :style="fileNodeStyle(item.level)"
-                :class="fileStore.fofId === item.id ? 'is-selected' : ''"
+                :class="
+                    fileStore.lastSelect !== null && fileStore.lastSelect.id === item.id
+                        ? 'is-selected'
+                        : ''
+                "
                 @click="handlePick(item)">
                 <svg-icon
                     name="right"
@@ -58,7 +62,7 @@ const fileNodeStyle = (level: number) => {
 
 const router = useRouter()
 const handlePick = async (item: FofInfo) => {
-    fileStore.fofId = item.id
+    fileStore.lastSelect = item
 
     if (item.is_dir) {
         let isExpand = false

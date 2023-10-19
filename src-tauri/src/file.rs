@@ -1,4 +1,4 @@
-use std::fs::{read_dir, remove_file, rename, File, OpenOptions};
+use std::fs::{create_dir, read_dir, remove_file, rename, File, OpenOptions};
 use std::io::{Read, Write};
 use std::path::Path;
 use tauri::command;
@@ -86,7 +86,7 @@ pub fn write_file(path: String, text: String) {
     let mut file = OpenOptions::new()
         .write(true)
         .truncate(true)
-        .open(path)
+        .open(&path)
         .unwrap();
     file.write_all(text.as_bytes()).unwrap();
 }
@@ -100,11 +100,16 @@ pub fn create_file(path: String) {
 }
 
 #[command]
+pub fn create_folder(path: String) {
+    create_dir(&path).unwrap();
+}
+
+#[command]
 pub fn delete_file(path: String) {
-    remove_file(path).unwrap();
+    remove_file(&path).unwrap();
 }
 
 #[command]
 pub fn rename_file(old_path: String, new_path: String) {
-    rename(old_path, new_path).unwrap();
+    rename(&old_path, &new_path).unwrap();
 }
