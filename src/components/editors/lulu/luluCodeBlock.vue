@@ -1,11 +1,7 @@
 <template>
     <div class="code-editor">
         <div class="tag">
-            <svg-icon
-                name="start"
-                class="icon"
-                @click="runCode"
-                v-if="status !== 'isRunning'" />
+            <svg-icon name="start" class="icon" @click="runCode" v-if="status !== 'isRunning'" />
             <svg-icon name="stop" class="icon" @click="runCode" v-else />
         </div>
         <div class="editor-box">

@@ -2,7 +2,6 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="style.css" />
-        <link rel="stylesheet" type="text/css" href="../config.css" />
     </head>
     <body>
         <div id="app">
@@ -17,7 +16,7 @@
             </div>
             <div class="folder-name">
                 <span>文件夹名称</span>
-                <input v-model="folderName" @keydown.enter="confirm" />
+                <input v-model="folderName" />
             </div>
             <div class="btn-group">
                 <button class="cancel" @click="cancel">取 消</button>
