@@ -1,5 +1,4 @@
-use serde::Serialize;
-use std::fs::{create_dir, create_dir_all, read_dir, remove_file, rename, File, OpenOptions};
+use std::fs::{create_dir, read_dir, remove_file, rename, File, OpenOptions};
 use std::io::{Read, Write};
 use std::path::Path;
 use tauri::command;
@@ -7,7 +6,7 @@ use uuid::Uuid;
 
 pub static LEGAL_EXTENSIONS: [&str; 2] = ["md", "lulu"];
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, serde::Serialize)]
 
 // file or folder
 pub struct Fof {
@@ -26,7 +25,6 @@ fn read_folder(path: &Path, mut level: u32) -> Vec<Fof> {
     level += 1;
     let paths = read_dir(path).unwrap();
     let mut folder_arr: Vec<Fof> = Vec::new();
-
     for p in paths {
         let uuid = Uuid::new_v4();
         let id = uuid.to_string().replace("-", "");
@@ -104,10 +102,6 @@ pub fn create_file(path: String) {
 #[command]
 pub fn create_folder(path: String) {
     create_dir(&path).unwrap();
-}
-
-pub fn create_folder_all(path: String) {
-    create_dir_all(&path).unwrap();
 }
 
 #[command]
