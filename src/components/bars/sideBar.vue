@@ -2,7 +2,7 @@
     <div class="side-bar">
         <div class="bar">
             <svg-icon name="folder" class="icon" @click="handlePick(markRaw(folderPanel))" />
-            <svg-icon name="kanban" class="icon" />
+            <svg-icon name="kanban" class="icon" @click="handlePick(markRaw(kanbanPanel))" />
         </div>
         <div class="panel" v-show="expandComponent">
             <keep-alive>
@@ -16,10 +16,11 @@
 import { ref, markRaw } from 'vue'
 import type { Raw } from 'vue'
 import folderPanel from '../panels/folder/folderPanel.vue'
+import kanbanPanel from '../panels/kanban/kanbanPanel.vue'
 
 const expandComponent = ref<Raw<typeof folderPanel> | null>(null)
 
-const handlePick = (component: Raw<typeof folderPanel>) => {
+const handlePick = (component: Raw<typeof folderPanel | typeof kanbanPanel>) => {
     expandComponent.value = expandComponent.value ? null : component
 }
 </script>
@@ -35,6 +36,8 @@ const handlePick = (component: Raw<typeof folderPanel>) => {
         flex-direction: column;
         width: 50px;
         gap: 30px;
+        // border-right: 1px solid #30363d;
+        margin-top: 10px;
 
         .icon {
             margin: 0 auto;
