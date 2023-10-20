@@ -10,6 +10,11 @@ const routes = [
         path: '/file',
         name: 'file',
         component: () => import('../views/FileView.vue')
+    },
+    {
+        path: '/kanban',
+        name: 'kanban',
+        component: () => import('../views/KanbanView.vue')
     }
 ]
 
