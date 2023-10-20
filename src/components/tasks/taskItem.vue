@@ -16,7 +16,7 @@ const handleRemove = () => {
 
 <style lang="less" scoped>
 .task-item {
-    height: auto;
+    height: 45px;
     border: 1px solid #363636;
     color: var(--block-font-color);
     background-color: #111111;
@@ -35,9 +35,9 @@ const handleRemove = () => {
         font-weight: 300;
         line-height: 0.2em;
         transition: all 0.05s linear;
-        cursor: pointer;
 
         &:hover {
+            cursor: pointer;
             font-size: 3rem;
             line-height: 0.1em;
         }
