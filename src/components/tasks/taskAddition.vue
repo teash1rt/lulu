@@ -18,10 +18,7 @@ const emit = defineEmits(['addTask'])
 const handleAddition = () => {
     if (status.value === 'input') {
         status.value = 'icon'
-        if (content.value.trim().length) {
-            emit('addTask', content.value)
-            content.value = ''
-        }
+        emit('addTask', content.value)
     }
 }
 </script>
@@ -33,26 +30,27 @@ const handleAddition = () => {
     border-radius: 10px;
 }
 .status-icon {
-    border: 1px solid var(--common-border-color);
+    border: 1px solid #393939;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     &:hover {
-        background-color: var(--theme-color);
+        background-color: #850bff;
     }
 }
 
 .status-input {
     display: flex;
-    border: 1px solid var(--theme-color);
+    border: 1px solid #850bff;
 
     input {
         height: 90%;
         width: 90%;
-        background-color: var(--bar-background-color);
+        background-color: #262626;
         border: none;
         margin: auto;
+        color: var(--block-font-color);
         &:focus {
             outline: none;
         }
