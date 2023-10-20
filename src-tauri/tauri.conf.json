@@ -38,12 +38,13 @@
                 "fullscreen": false,
                 "resizable": true,
                 "title": "lulu",
-                "width": 1200,
+                "width": 1300,
                 "minWidth": 700,
                 "height": 800,
                 "minHeight": 400,
                 "center": true,
-                "decorations": false
+                "decorations": false,
+                "fileDropEnabled": false
             }
         ]
     }
