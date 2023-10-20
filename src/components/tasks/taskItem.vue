@@ -16,9 +16,10 @@ const handleRemove = () => {
 
 <style lang="less" scoped>
 .task-item {
-    height: auto;
-    border: 1px solid var(--common-background-color);
-    background-color: var(--kanban-item-background-color);
+    height: 45px;
+    border: 1px solid #363636;
+    color: var(--block-font-color);
+    background-color: #111111;
     position: relative;
     cursor: move;
     border-radius: 10px;
@@ -34,9 +35,9 @@ const handleRemove = () => {
         font-weight: 300;
         line-height: 0.2em;
         transition: all 0.05s linear;
-        cursor: pointer;
 
         &:hover {
+            cursor: pointer;
             font-size: 3rem;
             line-height: 0.1em;
         }
