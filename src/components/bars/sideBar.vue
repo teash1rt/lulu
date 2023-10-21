@@ -36,7 +36,7 @@ const handlePick = (component: Raw<typeof folderPanel | typeof kanbanPanel>) => 
         flex-direction: column;
         width: 50px;
         gap: 30px;
-        // border-right: 1px solid #30363d;
+        border-right: 1px solid #30363d;
         margin-top: 10px;
 
         .icon {
