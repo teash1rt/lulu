@@ -1,8 +1,8 @@
 <template>
     <div class="kanban-view">
         <div class="column" v-for="i in 3" :key="i">
-            <div class="header">
-                {{ header[i - 1] }}
+            <div class="type">
+                {{ columnType[i - 1] }}
             </div>
             <VueDraggable
                 class="tasks"
@@ -32,7 +32,7 @@ import taskItem from '../components/tasks/taskItem.vue'
 import taskAddition from '../components/tasks/taskAddition.vue'
 import { getUUID } from '../utils/uuid'
 
-const header = ['To do', 'In progress', 'Completed']
+const columnType = ['To do', 'In progress', 'Completed']
 
 const list = ref([
     [
@@ -115,7 +115,7 @@ const handleAddition = (index: number, content: string) => {
         overflow: hidden;
         margin: 10px 0 auto 0;
 
-        .header {
+        .type {
             color: var(--block-font-color);
             padding: 0 7px;
             font-weight: 600;
