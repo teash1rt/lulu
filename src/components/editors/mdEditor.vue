@@ -1,12 +1,12 @@
 <template>
     <div class="md-editor">
         <div class="options">
-            <svg-icon name="text" class="icon" @click="mode = 'text'" />
+            <svg-icon name="text" class="icon" @click="mode = 'edit'" />
             <svg-icon name="split" class="icon" @click="mode = 'split'" />
             <svg-icon name="preview" class="icon" @click="mode = 'preview'" />
         </div>
         <textarea
-            v-if="mode === 'text'"
+            v-if="mode === 'edit'"
             v-model="content"
             :rows="content.split('\n').length"
             ref="textarea"
@@ -17,7 +17,7 @@
             v-else-if="mode === 'preview'"
             class="render"
             v-html="render(content).html"
-            @dblclick="mode = 'text'" />
+            @dblclick="mode = 'edit'" />
     </div>
 </template>
 
@@ -29,7 +29,6 @@ import {
     getTabContext,
     getBlockquoteContext
 } from '../../utils/mdContext'
-import 'highlight.js/styles/monokai-sublime.css'
 import '../../styles/markdown.less'
 import { invoke } from '@tauri-apps/api/tauri'
 import { render } from '../../utils/mdRender'
@@ -45,7 +44,7 @@ const props = defineProps({
     }
 })
 
-const mode = ref<'text' | 'split' | 'preview'>('text')
+const mode = ref<'edit' | 'split' | 'preview'>('edit')
 const content = ref<string>(props.content)
 const textarea = ref<HTMLTextAreaElement | null>(null)
 

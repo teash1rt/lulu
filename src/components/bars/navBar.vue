@@ -2,10 +2,6 @@
     <div class="nav-bar">
         <div class="option-group">
             <div>Lu</div>
-            <div>文件</div>
-            <div>文件</div>
-            <div>文件</div>
-            <div>文件</div>
         </div>
         <div class="button-group">
             <div @click="minimizeWindow">
