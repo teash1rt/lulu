@@ -8,7 +8,8 @@ export const FileStore = defineStore('FileStore', {
             filePath: '',
             fofInfo: [] as FofInfo[],
             openPath: '',
-            lastSelect: null as null | FofInfo
+            lastSelect: null as null | FofInfo,
+            expandFolder: [] as string[]
         }
     }
 })
