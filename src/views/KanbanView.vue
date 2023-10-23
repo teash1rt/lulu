@@ -1,86 +1,95 @@
 <template>
     <div class="kanban-view">
-        <div class="column" v-for="i in 3" :key="i">
+        <div class="column" v-for="(column, index) in columns" :key="column.column_type">
             <div class="type">
-                {{ columnType[i - 1] }}
+                {{ column.column_type }}
             </div>
             <VueDraggable
                 class="tasks"
-                v-model="list[i - 1]"
+                v-model="column.data"
                 :animation="150"
                 ghostClass="ghost"
                 group="people">
                 <taskItem
-                    v-for="item in list[i - 1]"
+                    v-for="item in column.data"
                     :key="item.id"
                     @removeItem="handleRemove(item.id)">
                     <template #task>
-                        {{ item.name }}
+                        {{ item.content }}
                     </template>
                 </taskItem>
             </VueDraggable>
             <hr class="divider" />
-            <taskAddition @addTask="handleAddition(i - 1, $event)" />
+            <taskAddition @addTask="handleAddition(index, $event)" />
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onBeforeUnmount, ref, watch } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import taskItem from '../components/tasks/taskItem.vue'
 import taskAddition from '../components/tasks/taskAddition.vue'
 import { getUUID } from '../utils/uuid'
+import type { KanbanColumn, KanbanColumnInfo } from '../types/Kanban'
+import { invoke } from '@tauri-apps/api/tauri'
+import { KanbanStore } from '../stores/KanbanStore'
 
-const columnType = ['To do', 'In progress', 'Completed']
+const columns = ref<KanbanColumnInfo[]>([])
+const kanbanStore = KanbanStore()
 
-const list = ref([
-    [
-        {
-            name: 'Jan',
-            id: '1'
-        },
-        {
-            name: 'Jean',
-            id: '2'
-        },
-        {
-            name: 'Johanna',
-            id: '3'
-        },
-        {
-            name: 'Juan',
-            id: '4'
+// +id 封装
+const getKanbanColumn = async () => {
+    const list: KanbanColumn[] = await invoke('read_kanban', {
+        id: kanbanStore.kanbanId
+    })
+    columns.value = []
+    for (let item of list) {
+        const data: { id: string; content: string }[] = []
+        for (let content of item.content) {
+            const id = getUUID()
+            data.push({
+                id,
+                content
+            })
         }
-    ],
-    [
+        columns.value.push({
+            column_type: item.column_type,
+            data
+        })
+    }
+}
+getKanbanColumn()
+
+// -id 解封
+const getRawKanbanList = () => {
+    const list: KanbanColumn[] = [
         {
-            name: 'tom',
-            id: '5'
+            column_type: 'To do',
+            content: []
         },
         {
-            name: 'mare',
-            id: '6'
-        }
-    ],
-    [
-        {
-            name: 'mage',
-            id: '7'
+            column_type: 'In progress',
+            content: []
         },
         {
-            name: 'jack',
-            id: '8'
+            column_type: 'Completed',
+            content: []
         }
     ]
-])
+    for (let i = 0; i < columns.value.length; i++) {
+        for (let item of columns.value[i].data) {
+            list[i].content.push(item.content)
+        }
+    }
+    return list
+}
 
 const handleRemove = (id: string) => {
     for (let i = 0; i <= 2; i++) {
-        for (let j = 0; j < list.value[i].length; j++) {
-            if (list.value[i][j].id === id) {
-                console.log('find')
-                list.value[i].splice(j, 1)
+        for (let j = 0; j < columns.value[i].data.length; j++) {
+            if (columns.value[i].data[j].id === id) {
+                columns.value[i].data.splice(j, 1)
                 break
             }
         }
@@ -88,11 +97,30 @@ const handleRemove = (id: string) => {
 }
 
 const handleAddition = (index: number, content: string) => {
-    list.value[index].push({
-        name: content,
-        id: getUUID(false)
+    columns.value[index].data.push({
+        id: getUUID(),
+        content
     })
 }
+
+const saveFile = async (path: string) => {
+    await invoke('save_kanban', {
+        id: path,
+        columns: getRawKanbanList()
+    })
+}
+
+watch(
+    () => kanbanStore.kanbanId,
+    async (_, oldV) => {
+        await saveFile(oldV)
+        getKanbanColumn()
+    }
+)
+
+onBeforeUnmount(async () => {
+    await saveFile(kanbanStore.kanbanId)
+})
 </script>
 
 <style scoped lang="less">
