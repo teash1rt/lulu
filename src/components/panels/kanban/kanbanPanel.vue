@@ -9,15 +9,19 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
 import kanbanList from './kanbanList.vue'
-import { invoke } from '@tauri-apps/api/tauri'
-
-const router = useRouter()
+import { WebviewWindow } from '@tauri-apps/api/window'
 
 const handleAdd = async () => {
-    router.push({ name: 'kanban' })
-    await invoke('read_kanban_list')
+    new WebviewWindow('newKanban', {
+        url: 'windows/newKanban/index.html',
+        decorations: false,
+        center: true,
+        width: 500,
+        height: 170,
+        resizable: false,
+        alwaysOnTop: true
+    })
 }
 </script>
 
@@ -29,8 +33,8 @@ const handleAdd = async () => {
         border-radius: 3px;
         cursor: pointer;
         width: 60%;
-        height: 35px;
-        margin: 0 auto;
+        height: 40px;
+        margin: 20px auto;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -38,7 +42,8 @@ const handleAdd = async () => {
 }
 
 .icon {
-    width: 25px;
-    height: 25px;
+    width: 23px;
+    height: 23px;
+    margin-right: 5px;
 }
 </style>
