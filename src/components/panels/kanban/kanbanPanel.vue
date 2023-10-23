@@ -1,7 +1,7 @@
 <template>
     <div class="kanban-panel">
         <div class="add-kanban" @click="handleAdd">
-            <svg-icon name="plus" color="#ccc" class="icon" />
+            <svg-icon name="plus" color="#ffffff" class="icon" />
             添加看板
         </div>
         <kanbanList />

@@ -1,21 +1,9 @@
 <template>
     <div class="md-editor">
         <div class="options">
-            <svg-icon
-                name="text"
-                class="icon"
-                :class="mode === 'edit' ? 'is-select' : ''"
-                @click="mode = 'edit'" />
-            <svg-icon
-                name="split"
-                class="icon"
-                :class="mode === 'split' ? 'is-select' : ''"
-                @click="mode = 'split'" />
-            <svg-icon
-                name="preview"
-                class="icon"
-                :class="mode === 'preview' ? 'is-select' : ''"
-                @click="mode = 'preview'" />
+            <svg-icon name="text" class="icon" @click="mode = 'edit'" />
+            <svg-icon name="split" class="icon" @click="mode = 'split'" />
+            <svg-icon name="preview" class="icon" @click="mode = 'preview'" />
         </div>
         <textarea
             v-if="mode === 'edit'"
@@ -27,7 +15,7 @@
             @keydown.`.prevent="handleBlockquote($event)" />
         <div
             v-else-if="mode === 'preview'"
-            class="render markdown"
+            class="render"
             v-html="render(content).html"
             @dblclick="mode = 'edit'" />
     </div>
@@ -44,7 +32,6 @@ import {
 import '../../styles/markdown.less'
 import { invoke } from '@tauri-apps/api/tauri'
 import { render } from '../../utils/mdRender'
-import { SettingsStore } from '../../stores/SettingsStore'
 
 const props = defineProps({
     content: {
@@ -57,8 +44,7 @@ const props = defineProps({
     }
 })
 
-const settingStore = SettingsStore()
-const mode = ref<'edit' | 'split' | 'preview'>(settingStore.settings!.display.md_mode)
+const mode = ref<'edit' | 'split' | 'preview'>('edit')
 const content = ref<string>(props.content)
 const textarea = ref<HTMLTextAreaElement | null>(null)
 
@@ -85,14 +71,8 @@ const handleTab = (event: KeyboardEvent) => {
     const context = lastLine === null ? null : getTabContext(lastLine, curLine)
     if (context === null || context === curLine) {
         content.value = content.value.slice(0, pos) + ' '.repeat(4) + content.value.slice(pos)
-        nextTick(() => {
-            target.selectionEnd = pos + 4
-        })
     } else {
         content.value = content.value.slice(0, l) + context + content.value.slice(r)
-        nextTick(() => {
-            target.selectionEnd = pos + 2
-        })
     }
 }
 
@@ -109,8 +89,17 @@ const handleBlockquote = (event: KeyboardEvent) => {
 }
 
 let lastContent = ''
-const saveFile = async (path: string = props.path) => {
-    if (content.value !== lastContent && settingStore.settings!.common.auto_save) {
+watch(
+    () => props.path,
+    async (_, oldV) => {
+        await saveFile(oldV)
+        content.value = props.content
+        lastContent = props.content
+    }
+)
+
+const saveFile = async (path: string) => {
+    if (content.value !== lastContent) {
         await invoke('write_file', {
             path: path,
             text: content.value
@@ -118,22 +107,8 @@ const saveFile = async (path: string = props.path) => {
     }
 }
 
-watch(
-    () => props.path,
-    async (_, oldV) => {
-        await saveFile(oldV)
-        content.value = props.content
-        lastContent = props.content
-        mode.value = settingStore.settings!.display.md_mode
-    }
-)
-
 onBeforeUnmount(async () => {
     await saveFile(props.path)
-})
-
-defineExpose({
-    saveFile
 })
 </script>
 
@@ -141,6 +116,8 @@ defineExpose({
 .md-editor {
     width: 100%;
     height: 100%;
+    background-color: var(--code-background-color);
+    color: var(--block-font-color);
     position: relative;
     .options {
         position: absolute;
@@ -156,8 +133,9 @@ defineExpose({
         padding: 30px 40px 0 60px;
         width: calc(100% - 100px);
         height: calc(100% - 30px);
-        font-size: 1.3rem;
+        font-size: 20px;
         background-color: var(--code-background-color);
+        color: var(--block-font-color);
     }
 
     textarea {
@@ -172,9 +150,5 @@ defineExpose({
 .icon {
     width: 20px;
     height: 20px;
-}
-
-.is-select {
-    background-color: var(--element-hover-color);
 }
 </style>

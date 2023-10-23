@@ -35,7 +35,6 @@ import type { FofInfo } from '../../../types/FofInfo.ts'
 import { useRouter } from 'vue-router'
 import { BusEvent } from '../../../types/BusEvent'
 import { emit } from '@tauri-apps/api/event'
-import { KanbanStore } from '../../../stores/KanbanStore'
 
 const props = defineProps({
     fofInfo: {
@@ -52,7 +51,6 @@ const fileNodeStyle = (level: number) => {
 
 const router = useRouter()
 const fileStore = FileStore()
-const kanbanStore = KanbanStore()
 const handlePick = async (item: FofInfo) => {
     fileStore.lastSelect = item
 
@@ -71,7 +69,6 @@ const handlePick = async (item: FofInfo) => {
     } else if (fileStore.filePath !== item.file_path) {
         fileStore.filePath = item.file_path
         if (router.currentRoute.value.name !== 'file') {
-            kanbanStore.kanbanId = ''
             router.push({ name: 'file' })
         }
         emit(BusEvent.SwitchFilePath, item.file_path)

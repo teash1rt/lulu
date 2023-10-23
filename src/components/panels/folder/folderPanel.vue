@@ -21,9 +21,8 @@
             <fileTree :fofInfo="fofInfo" v-if="mode === 'fileTree'" />
             <div v-html="outLine" v-else />
         </div>
-        <div class="no-folder" v-else>
-            尚未打开文件夹
-            <div class="common-button" @click="openFile">打开文件夹</div>
+        <div class="open-folder" v-else>
+            <button class="open-button" @click="openFile">打开文件夹</button>
         </div>
     </div>
 </template>
@@ -159,6 +158,14 @@ onMounted(() => {
 
 <style lang="less" scoped>
 .folder-panel {
+    .open-button {
+        color: #ffffff;
+        background-color: #850bff;
+        padding: 10px 25px;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
     .options {
         display: flex;
         justify-content: center;
@@ -166,10 +173,11 @@ onMounted(() => {
         margin: 5px 0 12px;
     }
 
-    .no-folder {
-        margin: 20px auto;
-        text-align: center;
-        font-size: 0.95rem;
+    .open-folder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 5px auto;
     }
 }
 
