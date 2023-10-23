@@ -128,7 +128,7 @@ onBeforeUnmount(async () => {
     display: flex;
     justify-content: center;
     gap: 4%;
-    background-color: #363636;
+    background-color: var(--common-background-color);
     height: 100%;
     min-width: 900px;
 
