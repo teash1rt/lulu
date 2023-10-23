@@ -21,7 +21,7 @@ import kanbanPanel from '../panels/kanban/kanbanPanel.vue'
 const expandComponent = ref<Raw<typeof folderPanel> | null>(null)
 
 const handlePick = (component: Raw<typeof folderPanel | typeof kanbanPanel>) => {
-    expandComponent.value = expandComponent.value ? null : component
+    expandComponent.value = expandComponent.value === component ? null : component
 }
 </script>
 
