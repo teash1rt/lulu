@@ -1,5 +1,5 @@
 <template>
-    <ul>
+    <ul onselectstart="return false">
         <li v-for="item of props.fofInfo" :key="item.id">
             <div
                 class="file-node"
@@ -13,14 +13,19 @@
                 <svg-icon
                     name="right"
                     class="icon"
-                    v-if="item.is_dir && !fileStore.expandFolder.includes(item.id)" />
+                    v-if="item.is_dir && !expandFolder.includes(item.id)" />
                 <svg-icon
                     name="down"
                     class="icon"
-                    v-else-if="item.is_dir && fileStore.expandFolder.includes(item.id)" />
+                    v-else-if="item.is_dir && expandFolder.includes(item.id)" />
+                <!-- <svg-icon
+                    name="markdown"
+                    class="icon"
+                    v-else-if="item.extension === 'md'"
+                    color="#ffffff" /> -->
                 {{ item.name }}
             </div>
-            <ul class="node-list" v-if="item.children && fileStore.expandFolder.includes(item.id)">
+            <ul class="node-list" v-if="item.children && expandFolder.includes(item.id)">
                 <li>
                     <FileTree :fofInfo="item.children" />
                 </li>
@@ -30,6 +35,7 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { FileStore } from '../../../stores/FileStore.ts'
 import type { FofInfo } from '../../../types/FofInfo.ts'
 import { useRouter } from 'vue-router'
@@ -43,6 +49,11 @@ const props = defineProps({
     }
 })
 
+const fileStore = FileStore()
+
+// 保存目录树中展开的文件夹
+const expandFolder = ref<string[]>([])
+
 const fileNodeStyle = (level: number) => {
     return {
         paddingLeft: level * 15 + 'px'
@@ -50,21 +61,20 @@ const fileNodeStyle = (level: number) => {
 }
 
 const router = useRouter()
-const fileStore = FileStore()
 const handlePick = async (item: FofInfo) => {
     fileStore.lastSelect = item
 
     if (item.is_dir) {
         let isExpand = false
-        for (let i = 0; i < fileStore.expandFolder.length; i++) {
-            if (fileStore.expandFolder[i] === item.id) {
+        for (let i = 0; i < expandFolder.value.length; i++) {
+            if (expandFolder.value[i] === item.id) {
                 isExpand = true
-                fileStore.expandFolder.splice(i, 1)
+                expandFolder.value.splice(i, 1)
                 break
             }
         }
         if (!isExpand) {
-            fileStore.expandFolder.push(item.id)
+            expandFolder.value.push(item.id)
         }
     } else if (fileStore.filePath !== item.file_path) {
         fileStore.filePath = item.file_path
@@ -81,20 +91,19 @@ ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
-    font-size: 1.1rem;
 }
-
 .node-list {
     line-height: 24px;
+    color: var(--block-font-color);
 }
-
 .file-node {
     line-height: 24px;
+    color: var(--block-font-color);
     cursor: pointer;
     white-space: nowrap;
 
     &:hover {
-        background-color: var(--element-hover-color);
+        background-color: #3d3e40;
     }
 }
 
@@ -105,6 +114,6 @@ ul {
 }
 
 .is-selected {
-    background-color: var(--element-hover-color);
+    background-color: #3d3e40;
 }
 </style>
