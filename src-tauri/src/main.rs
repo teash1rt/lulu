@@ -12,7 +12,7 @@ mod file;
 use runner::run_code;
 mod runner;
 
-use kanban::read_kanban_list;
+use kanban::{create_kanban, delete_kanban, get_kanban_list, read_kanban, save_kanban};
 mod kanban;
 
 use tauri::{
@@ -59,7 +59,11 @@ fn main() {
             create_folder,
             delete_file,
             rename_file,
-            read_kanban_list
+            read_kanban,
+            save_kanban,
+            get_kanban_list,
+            create_kanban,
+            delete_kanban
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
