@@ -112,10 +112,10 @@ pub fn create_folder_all(path: String) {
 
 #[command]
 pub fn delete_file(path: String) {
-    remove_file(&path).unwrap();
+    remove_file(path).unwrap();
 }
 
 #[command]
 pub fn rename_file(old_path: String, new_path: String) {
-    rename(&old_path, &new_path).unwrap();
+    rename(old_path, new_path).unwrap();
 }

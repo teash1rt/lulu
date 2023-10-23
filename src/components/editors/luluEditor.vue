@@ -1,24 +1,26 @@
 <template>
     <div class="lulu-editor">
         <div class="editor-navbar">
+            <div class="display">
+                <svg-icon
+                    name="left"
+                    class="icon"
+                    color="#ccc"
+                    @click="navbarVisible = false"
+                    v-if="navbarVisible" />
+                <svg-icon
+                    name="right"
+                    class="icon"
+                    color="#ccc"
+                    @click="navbarVisible = true"
+                    v-if="!navbarVisible" />
+            </div>
             <div class="options" v-if="navbarVisible">
                 <div @click="addEditor('code')">+ Code</div>
                 <div @click="addEditor('md')">+ Markdown</div>
                 <div @click="deleteEditor">
                     <svg-icon name="delete" class="icon" color="#ccc" />
                 </div>
-            </div>
-            <div class="display">
-                <svg-icon
-                    name="up"
-                    class="icon"
-                    @click="navbarVisible = false"
-                    v-if="navbarVisible" />
-                <svg-icon
-                    name="down2"
-                    class="icon"
-                    @click="navbarVisible = true"
-                    v-if="!navbarVisible" />
             </div>
         </div>
         <div class="workspace">
@@ -99,12 +101,10 @@ const addEditor = (type: 'md' | 'code') => {
 const deleteEditor = () => {
     if (luluStore.focusId !== null) {
         let index = -1
-        if (luluStore.focusId !== null) {
-            for (let i = 0; i < blocks.value.length; i++) {
-                if (luluStore.focusId === blocks.value[i].id) {
-                    index = i
-                    break
-                }
+        for (let i = 0; i < blocks.value.length; i++) {
+            if (luluStore.focusId === blocks.value[i].id) {
+                index = i
+                break
             }
         }
         if (~index) {
@@ -153,8 +153,10 @@ onBeforeUnmount(async () => {
     overflow: auto;
 
     .editor-navbar {
+        width: 100%;
         position: fixed;
         display: flex;
+        gap: 20px;
         color: var(--block-font-color);
         padding: 10px;
         z-index: 100;
@@ -172,6 +174,10 @@ onBeforeUnmount(async () => {
             &:hover {
                 background-color: #3d3e40;
             }
+        }
+
+        .display {
+            padding-top: 3px;
         }
     }
     .workspace {

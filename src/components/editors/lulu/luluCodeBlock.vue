@@ -1,9 +1,23 @@
 <template>
-    <div class="code-editor">
-        <svg-icon name="start" class="icon" @click="runCode" />
+    <div class="lulu-code-editor">
+        <div class="tag">
+            <svg-icon name="start" class="icon" @click="runCode" v-if="status !== 'isRunning'" />
+            <svg-icon name="stop" class="icon" @click="runCode" v-else />
+        </div>
         <div class="editor-box">
             <div class="editor" :ref="setEditor"></div>
-            <div class="code-result" v-if="codeResult.message">{{ codeResult.message }}</div>
+            <div class="code-result" v-if="status === 'afterRunning'">
+                <div class="info">
+                    <svg-icon
+                        name="pass"
+                        class="icon"
+                        color="#8fc778"
+                        v-if="codeResult.status === 'success'" />
+                    <svg-icon name="close" class="icon" color="#ff0000" v-else />
+                    {{ codeResult.time }}s
+                </div>
+                <div class="message">{{ codeResult.message }}</div>
+            </div>
         </div>
     </div>
 </template>
@@ -26,8 +40,9 @@ const props = defineProps({
 const editor = ref<monaco.editor.IStandaloneCodeEditor | null>(null)
 
 const codeResult = reactive<CodeResult>({
-    status: null,
-    message: null
+    status: 'success',
+    message: '',
+    time: 0.0
 })
 
 monaco.editor.defineTheme('myCustomTheme', {
@@ -92,12 +107,15 @@ const setEditor = (el: HTMLElement) => {
     return editor
 }
 
+const status = ref<'beforeRunning' | 'isRunning' | 'afterRunning'>('beforeRunning')
 const runCode = async () => {
     const code = toRaw(editor.value)?.getValue()
+    status.value = 'isRunning'
     const res: CodeResult = await invoke('run_code', {
         code: code
     })
-    codeResult.message = res.message
+    Object.assign(codeResult, res)
+    status.value = 'afterRunning'
 }
 
 const getContent = () => {
@@ -114,20 +132,33 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="less" scoped>
-.code-editor {
+.lulu-code-editor {
     width: 100%;
     display: flex;
     gap: 15px;
     color: var(--block-font-color);
+
+    .tag {
+        margin-top: 6px;
+    }
     .editor-box {
+        background-color: var(--block-background-color);
         display: flex;
         flex-direction: column;
         width: calc(100% - 35px);
+        padding-top: 15px;
     }
 
     .code-result {
-        margin: 5px 0;
-        padding: 0 26px;
+        .info {
+            display: flex;
+            gap: 10px;
+        }
+        .message {
+            background-color: var(--code-background-color);
+            padding: 10px 26px 0 26px;
+            white-space: pre-wrap;
+        }
     }
 }
 

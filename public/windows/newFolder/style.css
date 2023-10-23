@@ -1,11 +1,11 @@
-.file-name,
-.file-type {
+.folder-name {
     margin: 22px auto 22px 20%;
     display: flex;
     gap: 30px;
 }
 
-.file-name input:focus {
+.folder-name input:focus {
     outline: none;
     box-shadow: none;
 }
+

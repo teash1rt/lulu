@@ -1,5 +1,5 @@
 <template>
-    <div class="md-editor">
+    <div class="lulu-md-editor">
         <textarea
             v-if="status === 'md'"
             @blur="handleBlur"
@@ -101,7 +101,6 @@ const handleBlockquote = (event: KeyboardEvent) => {
 }
 
 const handleInput = () => {
-    console.log('p')
     textarea.value!.style.height = 'auto'
     textarea.value!.style.height = textarea.value!.scrollHeight + 'px'
 }
@@ -120,7 +119,7 @@ defineExpose({
 </script>
 
 <style lang="less" scoped>
-.md-editor {
+.lulu-md-editor {
     margin-left: 37px;
     display: flex;
 
@@ -139,7 +138,6 @@ defineExpose({
 
     div {
         cursor: pointer;
-        padding: 5px 10px;
         width: 100%;
         color: var(--block-font-color);
         word-wrap: break-word;
