@@ -13,19 +13,14 @@
                 <svg-icon
                     name="right"
                     class="icon"
-                    v-if="item.is_dir && !expandFolder.includes(item.id)" />
+                    v-if="item.is_dir && !fileStore.expandFolder.includes(item.id)" />
                 <svg-icon
                     name="down"
                     class="icon"
-                    v-else-if="item.is_dir && expandFolder.includes(item.id)" />
-                <!-- <svg-icon
-                    name="markdown"
-                    class="icon"
-                    v-else-if="item.extension === 'md'"
-                    color="#ffffff" /> -->
+                    v-else-if="item.is_dir && fileStore.expandFolder.includes(item.id)" />
                 {{ item.name }}
             </div>
-            <ul class="node-list" v-if="item.children && expandFolder.includes(item.id)">
+            <ul class="node-list" v-if="item.children && fileStore.expandFolder.includes(item.id)">
                 <li>
                     <FileTree :fofInfo="item.children" />
                 </li>
@@ -35,7 +30,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import { FileStore } from '../../../stores/FileStore.ts'
 import type { FofInfo } from '../../../types/FofInfo.ts'
 import { useRouter } from 'vue-router'
@@ -49,9 +43,6 @@ const props = defineProps({
         required: true
     }
 })
-
-// 保存目录树中展开的文件夹
-const expandFolder = ref<string[]>([])
 
 const fileNodeStyle = (level: number) => {
     return {
@@ -67,15 +58,15 @@ const handlePick = async (item: FofInfo) => {
 
     if (item.is_dir) {
         let isExpand = false
-        for (let i = 0; i < expandFolder.value.length; i++) {
-            if (expandFolder.value[i] === item.id) {
+        for (let i = 0; i < fileStore.expandFolder.length; i++) {
+            if (fileStore.expandFolder[i] === item.id) {
                 isExpand = true
-                expandFolder.value.splice(i, 1)
+                fileStore.expandFolder.splice(i, 1)
                 break
             }
         }
         if (!isExpand) {
-            expandFolder.value.push(item.id)
+            fileStore.expandFolder.push(item.id)
         }
     } else if (fileStore.filePath !== item.file_path) {
         fileStore.filePath = item.file_path

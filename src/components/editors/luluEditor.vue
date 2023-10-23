@@ -101,12 +101,10 @@ const addEditor = (type: 'md' | 'code') => {
 const deleteEditor = () => {
     if (luluStore.focusId !== null) {
         let index = -1
-        if (luluStore.focusId !== null) {
-            for (let i = 0; i < blocks.value.length; i++) {
-                if (luluStore.focusId === blocks.value[i].id) {
-                    index = i
-                    break
-                }
+        for (let i = 0; i < blocks.value.length; i++) {
+            if (luluStore.focusId === blocks.value[i].id) {
+                index = i
+                break
             }
         }
         if (~index) {
