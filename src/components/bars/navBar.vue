@@ -1,6 +1,8 @@
 <template>
     <div class="nav-bar">
-        <div class="option-group">Lu</div>
+        <div class="option-group">
+            <div>Lu</div>
+        </div>
         <div class="button-group">
             <div @click="minimizeWindow">
                 <svg-icon name="minimize" class="icon" />
@@ -17,10 +19,6 @@
 
 <script setup lang="ts">
 import { appWindow } from '@tauri-apps/api/window'
-import { emit, listen } from '@tauri-apps/api/event'
-import { BusEvent } from '../../types/BusEvent'
-import { useRoute } from 'vue-router'
-import { SettingsStore } from '../../stores/SettingsStore'
 
 const minimizeWindow = () => {
     appWindow.minimize()
@@ -30,18 +28,8 @@ const maximizeWindow = () => {
     appWindow.toggleMaximize()
 }
 
-listen(BusEvent.SaveCompleted, () => {
+const closeWindow = () => {
     appWindow.close()
-})
-
-const route = useRoute()
-const settingsStore = SettingsStore()
-const closeWindow = async () => {
-    if (!settingsStore.settings!.common.auto_save) {
-        appWindow.close()
-    } else {
-        route.name !== 'home' ? await emit(BusEvent.SaveFile) : appWindow.close()
-    }
 }
 </script>
 
@@ -51,14 +39,22 @@ const closeWindow = async () => {
     justify-content: space-between;
     width: 100%;
     height: 100%;
-    background-color: var(--bar-background-color);
-    color: var(--navbar-font-color);
+    background-color: #262626;
+    color: #b6b6b6;
 
     .option-group {
         display: flex;
         cursor: default;
-        align-items: center;
-        padding: 0 10px;
+
+        div {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 10px;
+            &:hover {
+                background: #414240;
+            }
+        }
     }
     .button-group {
         display: flex;
@@ -69,20 +65,20 @@ const closeWindow = async () => {
             align-items: center;
             width: 46px;
             &:hover {
-                background: var(--element-hover-color);
+                background: #414240;
+            }
+
+            .icon {
+                width: 20px;
+                height: 20px;
             }
         }
 
         div:nth-child(3) {
             &:hover {
-                background: var(--close-background-color);
+                background: #d61425;
             }
         }
     }
-}
-
-.icon {
-    width: 20px;
-    height: 20px;
 }
 </style>

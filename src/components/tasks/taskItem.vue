@@ -17,7 +17,7 @@ const handleRemove = () => {
 <style lang="less" scoped>
 .task-item {
     height: auto;
-    border: 1px solid #363636;
+    border: 1px solid var(--common-background-color);
     color: var(--block-font-color);
     background-color: #111111;
     position: relative;
