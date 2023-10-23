@@ -21,7 +21,6 @@ import { useRouter } from 'vue-router'
 import { KanbanStore } from '../../../stores/KanbanStore'
 import { invoke } from '@tauri-apps/api/tauri'
 import { listen } from '@tauri-apps/api/event'
-import { FileStore } from '../../../stores/FileStore'
 
 const list = ref<KanbanListItem[]>([])
 const getKanbanList = async () => {
@@ -30,13 +29,10 @@ const getKanbanList = async () => {
 getKanbanList()
 
 const router = useRouter()
-const fileStore = FileStore()
 const kanbanStore = KanbanStore()
 
 const handlePick = (id: string) => {
     kanbanStore.kanbanId = id
-    fileStore.lastSelect = null
-    fileStore.filePath = ''
     router.push({ name: 'kanban' })
 }
 

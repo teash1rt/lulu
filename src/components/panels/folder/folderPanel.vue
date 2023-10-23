@@ -21,7 +21,7 @@
             <fileTree :fofInfo="fofInfo" v-if="mode === 'fileTree'" />
             <div v-html="outLine" v-else />
         </div>
-        <div v-else>
+        <div class="open-folder" v-else>
             <button class="open-button" @click="openFile">打开文件夹</button>
         </div>
     </div>
@@ -171,6 +171,13 @@ onMounted(() => {
         justify-content: center;
         gap: 20px;
         margin: 5px 0 12px;
+    }
+
+    .open-folder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 5px auto;
     }
 }
 

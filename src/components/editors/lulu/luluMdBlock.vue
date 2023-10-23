@@ -24,7 +24,6 @@ import {
     getBlockquoteContext
 } from '../../../utils/mdContext'
 import type { LuluInfo } from '../../../types/LuluInfo'
-import 'highlight.js/styles/monokai-sublime.css'
 import '../../../styles/markdown.less'
 import { LuluStore } from '../../../stores/LuluStore'
 
