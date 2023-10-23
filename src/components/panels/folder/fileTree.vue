@@ -94,11 +94,11 @@ ul {
 }
 .node-list {
     line-height: 24px;
-    color: #ccc;
+    color: var(--block-font-color);
 }
 .file-node {
     line-height: 24px;
-    color: #ccc;
+    color: var(--block-font-color);
     cursor: pointer;
     white-space: nowrap;
 
