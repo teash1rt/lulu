@@ -19,6 +19,10 @@
 
 <script setup lang="ts">
 import { appWindow } from '@tauri-apps/api/window'
+import { emit, listen } from '@tauri-apps/api/event'
+import { BusEvent } from '../../types/BusEvent'
+import { useRoute } from 'vue-router'
+import { SettingsStore } from '../../stores/SettingsStore'
 
 const minimizeWindow = () => {
     appWindow.minimize()
@@ -28,8 +32,21 @@ const maximizeWindow = () => {
     appWindow.toggleMaximize()
 }
 
-const closeWindow = () => {
+listen(BusEvent.SaveCompleted, () => {
     appWindow.close()
+})
+
+const route = useRoute()
+const settingsStore = SettingsStore()
+const closeWindow = () => {
+    if (!settingsStore.settings!.common.auto_save) {
+        setTimeout(() => {
+            console.log(1)
+            appWindow.close()
+        }, 5000)
+    } else {
+        route.name !== 'home' ? emit(BusEvent.SaveFile) : appWindow.close()
+    }
 }
 </script>
 
