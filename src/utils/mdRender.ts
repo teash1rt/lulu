@@ -3,9 +3,11 @@ import anchor from 'markdown-it-anchor'
 import markdownItTocDoneRight from 'markdown-it-toc-done-right'
 import hljs from 'highlight.js/lib/core'
 import javascript from 'highlight.js/lib/languages/javascript'
+import typescript from 'highlight.js/lib/languages/typescript'
 import { emit } from '@tauri-apps/api/event'
 import { BusEvent } from '../types/BusEvent'
 hljs.registerLanguage('javascript', javascript)
+hljs.registerLanguage('typescript', typescript)
 
 const md: MarkdownIt = new MarkdownIt({
     highlight: (str, lang) => {
