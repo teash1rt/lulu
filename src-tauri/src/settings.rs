@@ -10,7 +10,6 @@ use tauri::{
 #[derive(Debug, Serialize, Deserialize)]
 struct SettingsCommon {
     auto_save: bool,
-    open_in_browser: bool,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

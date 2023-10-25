@@ -47,6 +47,7 @@ import type { LuluInfo } from '../../types/LuluInfo'
 import { getUUID } from '../../utils/uuid'
 import { LuluStore } from '../../stores/LuluStore'
 import { invoke } from '@tauri-apps/api/tauri'
+import { SettingsStore } from '../../stores/SettingsStore'
 
 const navbarVisible = ref<boolean>(true)
 
@@ -114,7 +115,11 @@ const deleteEditor = () => {
     }
 }
 
+const settingStore = SettingsStore()
 const saveFile = async (path: string) => {
+    if (!settingStore.settings!.common.auto_save) {
+        return
+    }
     const content = {
         blocks: [] as LuluInfo[]
     }

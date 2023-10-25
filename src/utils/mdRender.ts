@@ -4,29 +4,10 @@ import markdownItTocDoneRight from 'markdown-it-toc-done-right'
 import hljs from 'highlight.js/lib/core'
 import javascript from 'highlight.js/lib/languages/javascript'
 import typescript from 'highlight.js/lib/languages/typescript'
-import css from 'highlight.js/lib/languages/css'
-import json from 'highlight.js/lib/languages/json'
-import cpp from 'highlight.js/lib/languages/cpp'
-import c from 'highlight.js/lib/languages/c'
-import java from 'highlight.js/lib/languages/java'
-import python from 'highlight.js/lib/languages/python'
-import less from 'highlight.js/lib/languages/less'
-import scss from 'highlight.js/lib/languages/scss'
-import sql from 'highlight.js/lib/languages/sql'
 import { emit } from '@tauri-apps/api/event'
 import { BusEvent } from '../types/BusEvent'
-
 hljs.registerLanguage('javascript', javascript)
 hljs.registerLanguage('typescript', typescript)
-hljs.registerLanguage('css', css)
-hljs.registerLanguage('json', json)
-hljs.registerLanguage('cpp', cpp)
-hljs.registerLanguage('c', c)
-hljs.registerLanguage('java', java)
-hljs.registerLanguage('python', python)
-hljs.registerLanguage('less', less)
-hljs.registerLanguage('scss', scss)
-hljs.registerLanguage('sql', sql)
 
 const md: MarkdownIt = new MarkdownIt({
     highlight: (str, lang) => {
@@ -51,8 +32,8 @@ const md: MarkdownIt = new MarkdownIt({
         listType: 'ul',
         listClass: 'toc-list',
         linkClass: 'toc-link',
-        callback: async html => {
-            await emit(BusEvent.GetToc, html)
+        callback: html => {
+            emit(BusEvent.GetToc, html)
         }
     })
 
