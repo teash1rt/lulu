@@ -31,9 +31,9 @@
                 :luluInfo="blocks[index]"
                 :ref="
                     ref =>
-                        (luluRef[index] = ref as unknown as
-                            | typeof luluMdBlock
-                            | typeof luluCodeBlock)
+                        (luluRef[index] = ref as InstanceType<
+                            typeof luluMdBlock | typeof luluCodeBlock
+                        >)
                 " />
         </div>
     </div>
@@ -41,6 +41,7 @@
 
 <script setup lang="ts">
 import { ref, markRaw, watch, onBeforeUnmount } from 'vue'
+import { Raw } from 'vue'
 import luluMdBlock from './lulu/luluMdBlock.vue'
 import luluCodeBlock from './lulu/luluCodeBlock.vue'
 import type { LuluInfo } from '../../types/LuluInfo'
@@ -62,8 +63,8 @@ const props = defineProps({
     }
 })
 
-const luluRef = ref<Array<typeof luluMdBlock | typeof luluCodeBlock> | []>([])
-const components = ref<Array<typeof luluMdBlock | typeof luluCodeBlock>>([])
+const luluRef = ref<Array<InstanceType<typeof luluMdBlock | typeof luluCodeBlock>> | []>([])
+const components = ref<Array<Raw<typeof luluMdBlock | typeof luluCodeBlock>>>([])
 const blocks = ref<LuluInfo[]>([])
 
 const init = () => {
@@ -116,7 +117,7 @@ const deleteEditor = () => {
 }
 
 const settingStore = SettingsStore()
-const saveFile = async (path: string) => {
+const saveFile = async (path: string = props.path) => {
     if (!settingStore.settings!.common.auto_save) {
         return
     }
@@ -147,6 +148,10 @@ watch(
 
 onBeforeUnmount(async () => {
     await saveFile(props.path)
+})
+
+defineExpose({
+    saveFile
 })
 </script>
 
