@@ -73,8 +73,14 @@ const handleTab = (event: KeyboardEvent) => {
     const context = lastLine === null ? null : getTabContext(lastLine, curLine)
     if (context === null || context === curLine) {
         content.value = content.value.slice(0, pos) + ' '.repeat(4) + content.value.slice(pos)
+        nextTick(() => {
+            target.selectionEnd = pos + 4
+        })
     } else {
         content.value = content.value.slice(0, l) + context + content.value.slice(r)
+        nextTick(() => {
+            target.selectionEnd = pos + 2
+        })
     }
 }
 
