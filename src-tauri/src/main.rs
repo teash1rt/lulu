@@ -15,6 +15,9 @@ mod runner;
 use kanban::{create_kanban, delete_kanban, get_kanban_list, read_kanban, save_kanban};
 mod kanban;
 
+use settings::{read_settings, save_settings};
+mod settings;
+
 use tauri::{
     api::path::{self},
     Config,
@@ -27,12 +30,21 @@ fn init() {
             create_folder_all((&p.to_string_lossy()).to_string());
         }
 
-        let config_path = p.join("config.json");
-        if !config_path.exists() {
-            create_file((&config_path.to_string_lossy()).to_string());
+        let settings_path = p.join("settings.json");
+        if !settings_path.exists() {
+            create_file((&settings_path.to_string_lossy()).to_string());
             write_file(
-                (&config_path.to_string_lossy()).to_string(),
-                "{}".to_string(),
+                (&settings_path.to_string_lossy()).to_string(),
+                "{
+                    \"common\": {
+                      \"auto_save\": true
+                    },
+                    \"display\": {
+                      \"md_mode\": \"edit\",
+                      \"md_code_theme\": \"obsidian\"
+                    }
+                  }"
+                .to_string(),
             );
         }
 
@@ -63,7 +75,9 @@ fn main() {
             save_kanban,
             get_kanban_list,
             create_kanban,
-            delete_kanban
+            delete_kanban,
+            read_settings,
+            save_settings
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
