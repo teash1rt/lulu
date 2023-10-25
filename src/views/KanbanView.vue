@@ -34,6 +34,8 @@ import { getUUID } from '../utils/uuid'
 import type { KanbanColumn, KanbanColumnInfo } from '../types/Kanban'
 import { invoke } from '@tauri-apps/api/tauri'
 import { KanbanStore } from '../stores/KanbanStore'
+import { emit, listen } from '@tauri-apps/api/event'
+import { BusEvent } from '../types/BusEvent'
 
 const columns = ref<KanbanColumnInfo[]>([])
 const kanbanStore = KanbanStore()
@@ -117,6 +119,11 @@ watch(
         getKanbanColumn()
     }
 )
+
+listen(BusEvent.SaveFile, async () => {
+    await saveFile(kanbanStore.kanbanId)
+    emit(BusEvent.SaveCompleted)
+})
 
 onBeforeUnmount(async () => {
     await saveFile(kanbanStore.kanbanId)

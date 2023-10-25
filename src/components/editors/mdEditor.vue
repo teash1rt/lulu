@@ -97,6 +97,15 @@ const handleBlockquote = (event: KeyboardEvent) => {
 }
 
 let lastContent = ''
+const saveFile = async (path: string = props.path) => {
+    if (content.value !== lastContent && settingStore.settings!.common.auto_save) {
+        await invoke('write_file', {
+            path: path,
+            text: content.value
+        })
+    }
+}
+
 watch(
     () => props.path,
     async (_, oldV) => {
@@ -107,17 +116,12 @@ watch(
     }
 )
 
-const saveFile = async (path: string) => {
-    if (content.value !== lastContent && settingStore.settings!.common.auto_save) {
-        await invoke('write_file', {
-            path: path,
-            text: content.value
-        })
-    }
-}
-
 onBeforeUnmount(async () => {
     await saveFile(props.path)
+})
+
+defineExpose({
+    saveFile
 })
 </script>
 
