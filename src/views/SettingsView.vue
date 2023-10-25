@@ -44,14 +44,12 @@ import { invoke } from '@tauri-apps/api/tauri'
 const settingsStore = SettingsStore()
 const settings = reactive<Settings>({ ...settingsStore.settings! })
 
-const lastTheme = settings.display.md_code_theme
-
-watch(settings, newV => {
-    settingsStore.settings = { ...newV }
-    if (settings.display.md_code_theme !== lastTheme) {
-        changeTheme(settings.display.md_code_theme)
+watch(
+    () => settings.display.md_code_theme,
+    newV => {
+        changeTheme(newV)
     }
-})
+)
 
 onBeforeUnmount(async () => {
     await invoke('save_settings', {
@@ -66,6 +64,7 @@ onBeforeUnmount(async () => {
     background-color: var(--common-background-color);
     height: 100%;
     min-width: 900px;
+    color: var(--block-font-color);
 
     .settings-space {
         width: 60%;
