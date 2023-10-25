@@ -36,7 +36,7 @@ const props = defineProps({
 
 const content = ref<string>(props.luluInfo.content)
 const html = ref<string>(render(content.value).html)
-const status = ref<'md' | 'html'>('md')
+const status = ref<'md' | 'html'>(props.luluInfo.content === '' ? 'md' : 'html')
 const luluStore = LuluStore()
 const handleBlur = () => {
     setTimeout(() => {
@@ -82,8 +82,14 @@ const handleTab = (event: KeyboardEvent) => {
     const context = lastLine === null ? null : getTabContext(lastLine, curLine)
     if (context === null || context === curLine) {
         content.value = content.value.slice(0, pos) + ' '.repeat(4) + content.value.slice(pos)
+        nextTick(() => {
+            target.selectionEnd = pos + 4
+        })
     } else {
         content.value = content.value.slice(0, l) + context + content.value.slice(r)
+        nextTick(() => {
+            target.selectionEnd = pos + 2
+        })
     }
 }
 
@@ -105,7 +111,9 @@ const handleInput = () => {
 }
 
 onMounted(() => {
-    handleInput()
+    if (status.value === 'md') {
+        handleInput()
+    }
 })
 
 const getContent = () => {
