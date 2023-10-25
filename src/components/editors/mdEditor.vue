@@ -32,6 +32,7 @@ import {
 import '../../styles/markdown.less'
 import { invoke } from '@tauri-apps/api/tauri'
 import { render } from '../../utils/mdRender'
+import { SettingsStore } from '../../stores/SettingsStore'
 
 const props = defineProps({
     content: {
@@ -44,7 +45,8 @@ const props = defineProps({
     }
 })
 
-const mode = ref<'edit' | 'split' | 'preview'>('edit')
+const settingStore = SettingsStore()
+const mode = ref<'edit' | 'split' | 'preview'>(settingStore.settings!.display.md_mode)
 const content = ref<string>(props.content)
 const textarea = ref<HTMLTextAreaElement | null>(null)
 
@@ -95,11 +97,12 @@ watch(
         await saveFile(oldV)
         content.value = props.content
         lastContent = props.content
+        mode.value = settingStore.settings!.display.md_mode
     }
 )
 
 const saveFile = async (path: string) => {
-    if (content.value !== lastContent) {
+    if (content.value !== lastContent && settingStore.settings!.common.auto_save) {
         await invoke('write_file', {
             path: path,
             text: content.value

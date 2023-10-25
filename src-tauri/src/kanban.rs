@@ -33,12 +33,12 @@ pub struct KanbanListItem {
 }
 
 #[derive(Debug, Serialize)]
-struct KanbanDetails {
+pub struct KanbanDetails {
     path: String,
     data: Kanban,
 }
 
-fn get_kanban_content() -> KanbanDetails {
+fn get_kanban_details() -> KanbanDetails {
     let path = path::app_data_dir(&Config::default())
         .unwrap()
         .join("com.lulu")
@@ -52,7 +52,7 @@ fn get_kanban_content() -> KanbanDetails {
 
 #[command]
 pub fn get_kanban_list() -> Vec<KanbanListItem> {
-    let data = get_kanban_content().data;
+    let data = get_kanban_details().data;
     let mut kanban_list: Vec<KanbanListItem> = Vec::new();
 
     for kanban in data.kanban {
@@ -66,7 +66,7 @@ pub fn get_kanban_list() -> Vec<KanbanListItem> {
 
 #[command]
 pub fn read_kanban(id: String) -> Vec<KanbanColumn> {
-    let data = get_kanban_content().data;
+    let data = get_kanban_details().data;
     let mut column: Vec<KanbanColumn> = Vec::new();
     for kanban in data.kanban {
         if kanban.id == id {
@@ -78,7 +78,7 @@ pub fn read_kanban(id: String) -> Vec<KanbanColumn> {
 
 #[command]
 pub fn create_kanban(name: String) {
-    let details = get_kanban_content();
+    let details = get_kanban_details();
     let mut data = details.data;
     let id = Uuid::new_v4().to_string();
     data.kanban.push(KanbanInfo {
@@ -106,7 +106,7 @@ pub fn create_kanban(name: String) {
 
 #[command]
 pub fn delete_kanban(id: String) {
-    let details = get_kanban_content();
+    let details = get_kanban_details();
     let mut data = details.data;
     data.kanban.retain(|kanban| kanban.id != id);
     let json_data = to_string(&data).unwrap();
@@ -115,7 +115,7 @@ pub fn delete_kanban(id: String) {
 
 #[command]
 pub fn save_kanban(id: String, columns: Vec<KanbanColumn>) {
-    let details = get_kanban_content();
+    let details = get_kanban_details();
     let mut data = details.data;
     for kanban in &mut data.kanban {
         if kanban.id == id {
