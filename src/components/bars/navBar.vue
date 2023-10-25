@@ -40,10 +40,7 @@ const route = useRoute()
 const settingsStore = SettingsStore()
 const closeWindow = () => {
     if (!settingsStore.settings!.common.auto_save) {
-        setTimeout(() => {
-            console.log(1)
-            appWindow.close()
-        }, 5000)
+        appWindow.close()
     } else {
         route.name !== 'home' ? emit(BusEvent.SaveFile) : appWindow.close()
     }
