@@ -136,7 +136,6 @@ defineExpose({
         width: 100%;
         font-size: 20px;
         background-color: var(--block-background-color);
-        color: var(--block-font-color);
         &:focus {
             outline: none;
             box-shadow: none;
@@ -146,11 +145,9 @@ defineExpose({
     div {
         cursor: pointer;
         width: 100%;
-        color: var(--block-font-color);
         word-wrap: break-word;
-
         &:hover {
-            box-shadow: 2px 2px 4px 2px rgba(0, 0, 0, 0.2);
+            box-shadow: 2px 2px 3px 3px var(--box-shadow-color);
         }
     }
 }

@@ -30,10 +30,9 @@ onMounted(async () => {
 
 <style lang="less" scoped>
 .app {
-    width: 100%;
     .nav-bar {
         height: 40px;
-        border-bottom: 1px solid #30363d;
+        border-bottom: 1px solid var(--common-border-color);
     }
 
     .container {

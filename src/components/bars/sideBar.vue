@@ -35,7 +35,7 @@ const handlePickSettings = () => {
 <style lang="less" scoped>
 .side-bar {
     display: flex;
-    background-color: #252526;
+    background-color: var(--bar-background-color);
     height: 100%;
 
     .bar {
@@ -43,7 +43,7 @@ const handlePickSettings = () => {
         flex-direction: column;
         width: 50px;
         gap: 30px;
-        border-right: 1px solid #30363d;
+        border-right: 1px solid var(--common-border-color);
         margin-top: 10px;
     }
 

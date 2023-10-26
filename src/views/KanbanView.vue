@@ -145,13 +145,12 @@ onBeforeUnmount(async () => {
         gap: 20px;
         padding: 15px;
         width: 250px;
-        background-color: #262626;
+        background-color: var(--bar-background-color);
         border-radius: 5px;
         overflow: hidden;
         margin: 10px 0 auto 0;
 
         .type {
-            color: var(--block-font-color);
             padding: 0 7px;
             font-weight: 600;
             font-size: 1.1rem;

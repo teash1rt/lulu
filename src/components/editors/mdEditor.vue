@@ -129,8 +129,6 @@ defineExpose({
 .md-editor {
     width: 100%;
     height: 100%;
-    background-color: var(--code-background-color);
-    color: var(--block-font-color);
     position: relative;
     .options {
         position: absolute;
@@ -148,7 +146,6 @@ defineExpose({
         height: calc(100% - 30px);
         font-size: 20px;
         background-color: var(--code-background-color);
-        color: var(--block-font-color);
     }
 
     textarea {
