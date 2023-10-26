@@ -17,9 +17,8 @@ const handleRemove = () => {
 <style lang="less" scoped>
 .task-item {
     height: auto;
-    border: 1px solid #363636;
-    color: var(--block-font-color);
-    background-color: #111111;
+    border: 1px solid var(--common-background-color);
+    background-color: var(--kanban-item-background-color);
     position: relative;
     cursor: move;
     border-radius: 10px;

@@ -34,6 +34,8 @@ import { getUUID } from '../utils/uuid'
 import type { KanbanColumn, KanbanColumnInfo } from '../types/Kanban'
 import { invoke } from '@tauri-apps/api/tauri'
 import { KanbanStore } from '../stores/KanbanStore'
+import { emit, listen } from '@tauri-apps/api/event'
+import { BusEvent } from '../types/BusEvent'
 
 const columns = ref<KanbanColumnInfo[]>([])
 const kanbanStore = KanbanStore()
@@ -118,6 +120,11 @@ watch(
     }
 )
 
+listen(BusEvent.SaveFile, async () => {
+    await saveFile(kanbanStore.kanbanId)
+    emit(BusEvent.SaveCompleted)
+})
+
 onBeforeUnmount(async () => {
     await saveFile(kanbanStore.kanbanId)
 })
@@ -128,7 +135,7 @@ onBeforeUnmount(async () => {
     display: flex;
     justify-content: center;
     gap: 4%;
-    background-color: #363636;
+    background-color: var(--common-background-color);
     height: 100%;
     min-width: 900px;
 
@@ -138,13 +145,12 @@ onBeforeUnmount(async () => {
         gap: 20px;
         padding: 15px;
         width: 250px;
-        background-color: #262626;
+        background-color: var(--bar-background-color);
         border-radius: 5px;
         overflow: hidden;
         margin: 10px 0 auto 0;
 
         .type {
-            color: var(--block-font-color);
             padding: 0 7px;
             font-weight: 600;
             font-size: 1.1rem;

@@ -1,6 +1,6 @@
 <template>
     <div class="file-view">
-        <component :is="component" :content="content" :path="path" />
+        <component :is="component" :content="content" :path="path" ref="fileRef" />
     </div>
 </template>
 
@@ -8,12 +8,11 @@
 import { ref, watch, computed, markRaw, onMounted } from 'vue'
 import type { Raw } from 'vue'
 import { invoke } from '@tauri-apps/api/tauri'
-import codeEditor from '../components/editors/codeEditor.vue'
 import mdEditor from '../components/editors/mdEditor.vue'
 import luluEditor from '../components/editors/luluEditor.vue'
 import { BusEvent } from '../types/BusEvent'
 import { FileStore } from '../stores/FileStore.ts'
-import { listen } from '@tauri-apps/api/event'
+import { emit, listen } from '@tauri-apps/api/event'
 
 const content = ref<string>('')
 const path = ref<string>('')
@@ -28,7 +27,7 @@ const readFile = async (pathValue: string) => {
     })
 }
 
-const component = ref<Raw<typeof mdEditor | typeof luluEditor | typeof codeEditor> | null>(null)
+const component = ref<Raw<typeof mdEditor | typeof luluEditor> | null>(null)
 
 watch(extension, newV => {
     newV === 'md' ? (component.value = markRaw(mdEditor)) : (component.value = markRaw(luluEditor))
@@ -45,6 +44,13 @@ listen(BusEvent.SwitchFilePath, async data => {
     const newPath = data.payload as string
     content.value = (await readFile(newPath)) as string
     path.value = newPath
+})
+
+const fileRef = ref<InstanceType<typeof mdEditor | typeof luluEditor> | null>(null)
+
+listen(BusEvent.SaveFile, async () => {
+    await fileRef.value!.saveFile()
+    emit(BusEvent.SaveCompleted)
 })
 </script>
 

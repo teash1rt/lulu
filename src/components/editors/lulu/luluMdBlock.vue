@@ -10,7 +10,7 @@
             @keydown.enter.prevent="handleEnter($event)"
             @keydown.tab.prevent="handleTab($event)"
             @keydown.`.prevent="handleBlockquote($event)" />
-        <div v-else v-html="html" @dblclick="handleFocus" />
+        <div class="markdown" v-else v-html="html" @dblclick="handleFocus" />
     </div>
 </template>
 
@@ -24,7 +24,6 @@ import {
     getBlockquoteContext
 } from '../../../utils/mdContext'
 import type { LuluInfo } from '../../../types/LuluInfo'
-import 'highlight.js/styles/monokai-sublime.css'
 import '../../../styles/markdown.less'
 import { LuluStore } from '../../../stores/LuluStore'
 
@@ -37,7 +36,7 @@ const props = defineProps({
 
 const content = ref<string>(props.luluInfo.content)
 const html = ref<string>(render(content.value).html)
-const status = ref<'md' | 'html'>('md')
+const status = ref<'md' | 'html'>(props.luluInfo.content === '' ? 'md' : 'html')
 const luluStore = LuluStore()
 const handleBlur = () => {
     setTimeout(() => {
@@ -83,8 +82,14 @@ const handleTab = (event: KeyboardEvent) => {
     const context = lastLine === null ? null : getTabContext(lastLine, curLine)
     if (context === null || context === curLine) {
         content.value = content.value.slice(0, pos) + ' '.repeat(4) + content.value.slice(pos)
+        nextTick(() => {
+            target.selectionEnd = pos + 4
+        })
     } else {
         content.value = content.value.slice(0, l) + context + content.value.slice(r)
+        nextTick(() => {
+            target.selectionEnd = pos + 2
+        })
     }
 }
 
@@ -106,7 +111,9 @@ const handleInput = () => {
 }
 
 onMounted(() => {
-    handleInput()
+    if (status.value === 'md') {
+        handleInput()
+    }
 })
 
 const getContent = () => {
@@ -129,7 +136,6 @@ defineExpose({
         width: 100%;
         font-size: 20px;
         background-color: var(--block-background-color);
-        color: var(--block-font-color);
         &:focus {
             outline: none;
             box-shadow: none;
@@ -139,11 +145,9 @@ defineExpose({
     div {
         cursor: pointer;
         width: 100%;
-        color: var(--block-font-color);
         word-wrap: break-word;
-
         &:hover {
-            box-shadow: 2px 2px 4px 2px rgba(0, 0, 0, 0.2);
+            box-shadow: 2px 2px 3px 3px var(--box-shadow-color);
         }
     }
 }

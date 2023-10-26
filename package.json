@@ -15,7 +15,7 @@
     },
     "dependencies": {
         "@tauri-apps/api": "^1.4.0",
-        "highlight.js": "^11.8.0",
+        "highlight.js": "^11.9.0",
         "markdown-it": "^13.0.1",
         "markdown-it-anchor": "^8.6.7",
         "markdown-it-toc-done-right": "^4.2.0",

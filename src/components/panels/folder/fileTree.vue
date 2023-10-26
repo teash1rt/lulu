@@ -1,5 +1,5 @@
 <template>
-    <ul onselectstart="return false">
+    <ul>
         <li v-for="item of props.fofInfo" :key="item.id">
             <div
                 class="file-node"
@@ -35,7 +35,6 @@ import type { FofInfo } from '../../../types/FofInfo.ts'
 import { useRouter } from 'vue-router'
 import { BusEvent } from '../../../types/BusEvent'
 import { emit } from '@tauri-apps/api/event'
-import { KanbanStore } from '../../../stores/KanbanStore'
 
 const props = defineProps({
     fofInfo: {
@@ -52,7 +51,6 @@ const fileNodeStyle = (level: number) => {
 
 const router = useRouter()
 const fileStore = FileStore()
-const kanbanStore = KanbanStore()
 const handlePick = async (item: FofInfo) => {
     fileStore.lastSelect = item
 
@@ -71,7 +69,6 @@ const handlePick = async (item: FofInfo) => {
     } else if (fileStore.filePath !== item.file_path) {
         fileStore.filePath = item.file_path
         if (router.currentRoute.value.name !== 'file') {
-            kanbanStore.kanbanId = ''
             router.push({ name: 'file' })
         }
         emit(BusEvent.SwitchFilePath, item.file_path)
@@ -84,19 +81,20 @@ ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
+    font-size: 1.1rem;
 }
+
 .node-list {
     line-height: 24px;
-    color: var(--block-font-color);
 }
+
 .file-node {
     line-height: 24px;
-    color: var(--block-font-color);
     cursor: pointer;
     white-space: nowrap;
 
     &:hover {
-        background-color: #3d3e40;
+        background-color: var(--element-hover-color);
     }
 }
 
@@ -107,6 +105,6 @@ ul {
 }
 
 .is-selected {
-    background-color: #3d3e40;
+    background-color: var(--element-hover-color);
 }
 </style>

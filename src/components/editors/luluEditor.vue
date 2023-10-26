@@ -31,9 +31,9 @@
                 :luluInfo="blocks[index]"
                 :ref="
                     ref =>
-                        (luluRef[index] = ref as unknown as
-                            | typeof luluMdBlock
-                            | typeof luluCodeBlock)
+                        (luluRef[index] = ref as InstanceType<
+                            typeof luluMdBlock | typeof luluCodeBlock
+                        >)
                 " />
         </div>
     </div>
@@ -41,12 +41,14 @@
 
 <script setup lang="ts">
 import { ref, markRaw, watch, onBeforeUnmount } from 'vue'
+import { Raw } from 'vue'
 import luluMdBlock from './lulu/luluMdBlock.vue'
 import luluCodeBlock from './lulu/luluCodeBlock.vue'
 import type { LuluInfo } from '../../types/LuluInfo'
 import { getUUID } from '../../utils/uuid'
 import { LuluStore } from '../../stores/LuluStore'
 import { invoke } from '@tauri-apps/api/tauri'
+import { SettingsStore } from '../../stores/SettingsStore'
 
 const navbarVisible = ref<boolean>(true)
 
@@ -61,8 +63,8 @@ const props = defineProps({
     }
 })
 
-const luluRef = ref<Array<typeof luluMdBlock | typeof luluCodeBlock> | []>([])
-const components = ref<Array<typeof luluMdBlock | typeof luluCodeBlock>>([])
+const luluRef = ref<Array<InstanceType<typeof luluMdBlock | typeof luluCodeBlock>> | []>([])
+const components = ref<Array<Raw<typeof luluMdBlock | typeof luluCodeBlock>>>([])
 const blocks = ref<LuluInfo[]>([])
 
 const init = () => {
@@ -114,7 +116,11 @@ const deleteEditor = () => {
     }
 }
 
-const saveFile = async (path: string) => {
+const settingStore = SettingsStore()
+const saveFile = async (path: string = props.path) => {
+    if (!settingStore.settings!.common.auto_save) {
+        return
+    }
     const content = {
         blocks: [] as LuluInfo[]
     }
@@ -143,6 +149,10 @@ watch(
 onBeforeUnmount(async () => {
     await saveFile(props.path)
 })
+
+defineExpose({
+    saveFile
+})
 </script>
 
 <style lang="less" scoped>
@@ -157,7 +167,6 @@ onBeforeUnmount(async () => {
         position: fixed;
         display: flex;
         gap: 20px;
-        color: var(--block-font-color);
         padding: 10px;
         z-index: 100;
         background-color: var(--code-background-color);
@@ -172,7 +181,7 @@ onBeforeUnmount(async () => {
             margin: 0 5px;
             cursor: pointer;
             &:hover {
-                background-color: #3d3e40;
+                background-color: var(--element-hover-color);
             }
         }
 

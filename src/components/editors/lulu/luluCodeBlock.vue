@@ -136,7 +136,6 @@ onBeforeUnmount(() => {
     width: 100%;
     display: flex;
     gap: 15px;
-    color: var(--block-font-color);
 
     .tag {
         margin-top: 6px;

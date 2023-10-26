@@ -15,14 +15,24 @@
 <script setup lang="ts">
 import sideBar from './components/bars/sideBar.vue'
 import navBar from './components/bars/navBar.vue'
+import { onMounted } from 'vue'
+import { invoke } from '@tauri-apps/api/tauri'
+import { SettingsStore } from './stores/SettingsStore'
+import type { Settings } from './types/Settings'
+import { changeTheme } from './utils/changeTheme'
+
+const settingsStore = SettingsStore()
+onMounted(async () => {
+    settingsStore.settings = (await invoke('read_settings')) as Settings
+    changeTheme(settingsStore.settings!.display.md_code_theme)
+})
 </script>
 
 <style lang="less" scoped>
 .app {
-    width: 100%;
     .nav-bar {
         height: 40px;
-        border-bottom: 1px solid #30363d;
+        border-bottom: 1px solid var(--common-border-color);
     }
 
     .container {

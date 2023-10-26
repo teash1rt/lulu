@@ -1,12 +1,6 @@
 <template>
     <div class="nav-bar">
-        <div class="option-group">
-            <div>Lu</div>
-            <div>文件</div>
-            <div>文件</div>
-            <div>文件</div>
-            <div>文件</div>
-        </div>
+        <div class="option-group">Lu</div>
         <div class="button-group">
             <div @click="minimizeWindow">
                 <svg-icon name="minimize" class="icon" />
@@ -23,6 +17,10 @@
 
 <script setup lang="ts">
 import { appWindow } from '@tauri-apps/api/window'
+import { emit, listen } from '@tauri-apps/api/event'
+import { BusEvent } from '../../types/BusEvent'
+import { useRoute } from 'vue-router'
+import { SettingsStore } from '../../stores/SettingsStore'
 
 const minimizeWindow = () => {
     appWindow.minimize()
@@ -32,8 +30,18 @@ const maximizeWindow = () => {
     appWindow.toggleMaximize()
 }
 
-const closeWindow = () => {
+listen(BusEvent.SaveCompleted, () => {
     appWindow.close()
+})
+
+const route = useRoute()
+const settingsStore = SettingsStore()
+const closeWindow = () => {
+    if (!settingsStore.settings!.common.auto_save) {
+        appWindow.close()
+    } else {
+        route.name !== 'home' ? emit(BusEvent.SaveFile) : appWindow.close()
+    }
 }
 </script>
 
@@ -43,22 +51,14 @@ const closeWindow = () => {
     justify-content: space-between;
     width: 100%;
     height: 100%;
-    background-color: #262626;
-    color: #b6b6b6;
+    background-color: var(--bar-background-color);
+    color: var(--navbar-font-color);
 
     .option-group {
         display: flex;
         cursor: default;
-
-        div {
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            padding: 0 10px;
-            &:hover {
-                background: #414240;
-            }
-        }
+        align-items: center;
+        padding: 0 10px;
     }
     .button-group {
         display: flex;
@@ -69,20 +69,20 @@ const closeWindow = () => {
             align-items: center;
             width: 46px;
             &:hover {
-                background: #414240;
-            }
-
-            .icon {
-                width: 20px;
-                height: 20px;
+                background: var(--element-hover-color);
             }
         }
 
         div:nth-child(3) {
             &:hover {
-                background: #d61425;
+                background: var(--close-background-color);
             }
         }
     }
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
 }
 </style>
