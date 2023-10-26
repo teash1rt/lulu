@@ -1,8 +1,6 @@
 <template>
     <div class="nav-bar">
-        <div class="option-group">
-            <div>Lu</div>
-        </div>
+        <div class="option-group">Lu</div>
         <div class="button-group">
             <div @click="minimizeWindow">
                 <svg-icon name="minimize" class="icon" />
@@ -53,22 +51,14 @@ const closeWindow = () => {
     justify-content: space-between;
     width: 100%;
     height: 100%;
-    background-color: #262626;
-    color: #b6b6b6;
+    background-color: var(--bar-background-color);
+    color: var(--navbar-font-color);
 
     .option-group {
         display: flex;
         cursor: default;
-
-        div {
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            padding: 0 10px;
-            &:hover {
-                background: #414240;
-            }
-        }
+        align-items: center;
+        padding: 0 10px;
     }
     .button-group {
         display: flex;
@@ -79,20 +69,20 @@ const closeWindow = () => {
             align-items: center;
             width: 46px;
             &:hover {
-                background: #414240;
-            }
-
-            .icon {
-                width: 20px;
-                height: 20px;
+                background: var(--element-hover-color);
             }
         }
 
         div:nth-child(3) {
             &:hover {
-                background: #d61425;
+                background: var(--close-background-color);
             }
         }
     }
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
 }
 </style>

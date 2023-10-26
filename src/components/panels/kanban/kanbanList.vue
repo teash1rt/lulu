@@ -56,17 +56,16 @@ const handleRemove = async (id: string) => {
 <style lang="less" scoped>
 .kanban-list {
     .list-item {
-        height: 50px;
-        color: var(--block-font-color);
-        &:hover {
-            background-color: #3d3e40;
-        }
-        border-top: 1px solid #30363d;
-        border-bottom: 1px solid #30363d;
+        height: 60px;
+        border-top: 1px solid var(--common-border-color);
+        border-bottom: 1px solid var(--common-border-color);
         position: relative;
 
+        &:hover {
+            background-color: var(--element-hover-color);
+        }
+
         .item-name {
-            font-size: 1.1rem;
             margin: 5px 0 0 15px;
         }
 
@@ -88,6 +87,6 @@ const handleRemove = async (id: string) => {
 }
 
 .is-select {
-    background-color: #3d3e40;
+    background-color: var(--element-hover-color);
 }
 </style>

@@ -11,33 +11,46 @@
 :root {
     --code-background-color: #1e1e1e;
     --block-background-color: #0a0a0a;
+    --bar-background-color: #252526;
     --block-font-color: #d4d4d4;
     --common-background-color: #363636;
+    --theme-color: #7e0cf0;
+    --theme-color-hover: #850bff;
+    --common-border-color: #30363d;
+    --element-hover-color: #3d3e40;
+    --box-shadow-color: #171717;
+    --navbar-font-color: #b6b6b6;
+    --close-background-color: #d61425;
+    --kanban-item-background-color: #111111;
+    --home-font-color: #4d4e4f;
+    --select-background-color: #575757;
+    --color-white: #ffffff;
+    color: var(--block-font-color);
+    font-family: calibri;
+    font-size: 18px;
 }
 
 * {
     margin: 0;
-    padding: 0;
-    // font-family: 'calibri';
+    user-select: none;
 }
 
 ::-webkit-scrollbar-track {
-    background-color: #252526; /* 轨道的背景颜色 */
+    background-color: var(--bar-background-color); /* 轨道的背景颜色 */
 }
 
 ::-webkit-scrollbar-thumb {
     background-color: #424242; /* 滑块的背景颜色 */
-    // border-radius: 10px; /* 滑块的圆角半径 */
 }
 
 ::-webkit-scrollbar {
     width: 17px; /* 滚动条的宽度 */
-    background-color: #252526; /* 滚动条的背景颜色 */
+    background-color: var(--bar-background-color); /* 滚动条的背景颜色 */
     cursor: default;
 }
 
 ::-webkit-scrollbar-corner {
-    background-color: #252526;
+    background-color: var(--bar-background-color);
 }
 
 li {
@@ -46,6 +59,7 @@ li {
 }
 
 textarea {
+    color: var(--block-font-color);
     font-family: consola;
     resize: none;
     border: 0;
@@ -85,7 +99,7 @@ input[type='checkbox']:after {
     height: 16px;
     border-radius: 3px;
     visibility: visible;
-    background-color: white;
+    background-color: var(--color-white);
 }
 
 input[type='checkbox']:checked::before {
@@ -97,8 +111,8 @@ input[type='checkbox']:checked::before {
     width: 18px;
     height: 18px;
     border-radius: 3px;
-    border-color: #0798ff;
-    background-color: #0798ff;
+    border-color: var(--theme-color);
+    background-color: var(--theme-color);
 }
 
 input[type='checkbox']:checked:after {
@@ -109,11 +123,11 @@ input[type='checkbox']:checked:after {
     display: table;
     width: 4px;
     height: 8px;
-    border: 2px solid white;
+    border: 2px solid var(--color-white);
     border-top: 0;
     border-left: 0;
     border-radius: 0;
-    background-color: #0798ff;
+    background-color: var(--theme-color);
     transform: scale(0.2) rotate(45deg);
     animation: checked-select 0.2s ease-in forwards;
 }
@@ -174,18 +188,18 @@ input[type='radio']:checked:after {
 }
 
 select {
-    background-color: #575757;
+    background-color: var(--select-background-color);
     color: var(--block-font-color);
-    font-size: 1rem;
-
+    font-size: 0.9rem;
+    padding: 2px;
     &:focus {
         outline: none;
     }
 }
 
 .common-button {
-    color: #ffffff;
-    background-color: #7e0cf0;
+    color: var(--color-white);
+    background-color: var(--theme-color);
     border-radius: 3px;
     cursor: pointer;
     width: 50%;
@@ -194,8 +208,9 @@ select {
     display: flex;
     justify-content: center;
     align-items: center;
+    font-size: 0.95rem;
 
     &:hover {
-        background-color: #850bff;
+        background-color: var(--theme-color-hover);
     }
 }
