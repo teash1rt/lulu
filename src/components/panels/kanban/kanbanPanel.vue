@@ -1,6 +1,6 @@
 <template>
     <div class="kanban-panel">
-        <div class="add-kanban" @click="handleAdd">
+        <div class="common-button" @click="handleAdd">
             <svg-icon name="plus" color="#ffffff" class="icon" />
             添加看板
         </div>
@@ -26,21 +26,6 @@ const handleAdd = async () => {
 </script>
 
 <style lang="less" scoped>
-.kanban-panel {
-    .add-kanban {
-        color: #ffffff;
-        background-color: #850bff;
-        border-radius: 3px;
-        cursor: pointer;
-        width: 60%;
-        height: 40px;
-        margin: 20px auto;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-}
-
 .icon {
     width: 23px;
     height: 23px;
