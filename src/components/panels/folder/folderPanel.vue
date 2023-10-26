@@ -169,7 +169,7 @@ onMounted(() => {
     .no-folder {
         margin: 20px auto;
         text-align: center;
-        font-size: 0.95rem;
+        font-size: 0.9rem;
     }
 }
 
