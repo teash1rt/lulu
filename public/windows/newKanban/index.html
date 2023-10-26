@@ -17,7 +17,7 @@
             </div>
             <div class="kanban-name">
                 <span>看板名称</span>
-                <input v-model="kanbanName" />
+                <input v-model="kanbanName" @keydown.enter="confirm" />
             </div>
             <div class="btn-group">
                 <button class="cancel" @click="cancel">取 消</button>
