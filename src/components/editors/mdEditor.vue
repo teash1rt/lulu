@@ -1,9 +1,21 @@
 <template>
     <div class="md-editor">
         <div class="options">
-            <svg-icon name="text" class="icon" @click="mode = 'edit'" />
-            <svg-icon name="split" class="icon" @click="mode = 'split'" />
-            <svg-icon name="preview" class="icon" @click="mode = 'preview'" />
+            <svg-icon
+                name="text"
+                class="icon"
+                :class="mode === 'edit' ? 'is-select' : ''"
+                @click="mode = 'edit'" />
+            <svg-icon
+                name="split"
+                class="icon"
+                :class="mode === 'split' ? 'is-select' : ''"
+                @click="mode = 'split'" />
+            <svg-icon
+                name="preview"
+                class="icon"
+                :class="mode === 'preview' ? 'is-select' : ''"
+                @click="mode = 'preview'" />
         </div>
         <textarea
             v-if="mode === 'edit'"
@@ -160,5 +172,9 @@ defineExpose({
 .icon {
     width: 20px;
     height: 20px;
+}
+
+.is-select {
+    background-color: var(--element-hover-color);
 }
 </style>
