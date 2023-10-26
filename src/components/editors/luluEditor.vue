@@ -18,6 +18,9 @@
             <div class="options" v-if="navbarVisible">
                 <div @click="addEditor('code')">+ Code</div>
                 <div @click="addEditor('md')">+ Markdown</div>
+                <div @click="eraseOutput">
+                    <svg-icon name="erase" class="icon" color="#ccc" />
+                </div>
                 <div @click="deleteEditor">
                     <svg-icon name="delete" class="icon" color="#ccc" />
                 </div>
@@ -112,6 +115,18 @@ const deleteEditor = () => {
         if (~index) {
             blocks.value.splice(index, 1)
             components.value.splice(index, 1)
+        }
+    }
+}
+
+const eraseOutput = () => {
+    if (luluStore.focusId !== null) {
+        for (let i = 0; i < blocks.value.length; i++) {
+            if (luluStore.focusId === blocks.value[i].id) {
+                const codeBlock = luluRef.value[i] as InstanceType<typeof luluCodeBlock>
+                codeBlock.clearOutput()
+                break
+            }
         }
     }
 }
