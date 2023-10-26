@@ -18,7 +18,9 @@ const emit = defineEmits(['addTask'])
 const handleAddition = () => {
     if (status.value === 'input') {
         status.value = 'icon'
-        emit('addTask', content.value)
+        if (content.value.trim().length) {
+            emit('addTask', content.value)
+        }
     }
 }
 </script>
