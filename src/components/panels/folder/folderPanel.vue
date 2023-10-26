@@ -159,7 +159,6 @@ onMounted(() => {
 
 <style lang="less" scoped>
 .folder-panel {
-    color: var(--block-font-color);
     .options {
         display: flex;
         justify-content: center;
@@ -170,6 +169,7 @@ onMounted(() => {
     .no-folder {
         margin: 20px auto;
         text-align: center;
+        font-size: 0.95rem;
     }
 }
 

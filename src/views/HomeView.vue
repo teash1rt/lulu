@@ -1,7 +1,7 @@
 <template>
     <div class="home-view">
         <svg-icon name="logo" class="icon" color="#4c4e4f" />
-        <div class="title">Welcome To Lulu</div>
+        <div class="title">Lulu</div>
     </div>
 </template>
 
@@ -14,19 +14,18 @@
     align-items: center;
     background-color: var(--common-background-color);
     height: 100%;
-    color: #4d4e4f;
+    color: var(--home-font-color);
 
     .title {
-        margin-top: 10vh;
-        margin-left: 25px;
-        font-size: 2.5rem;
+        margin-top: 3vh;
+        font-size: 5rem;
         font-weight: 900;
     }
 }
 
 .icon {
-    width: 200px;
-    height: 200px;
-    margin-top: 15vh;
+    width: 320px;
+    height: 320px;
+    margin-top: 8vh;
 }
 </style>
