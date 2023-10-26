@@ -10,7 +10,7 @@
             @keydown.enter.prevent="handleEnter($event)"
             @keydown.tab.prevent="handleTab($event)"
             @keydown.`.prevent="handleBlockquote($event)" />
-        <div v-else v-html="html" @dblclick="handleFocus" />
+        <div class="markdown" v-else v-html="html" @dblclick="handleFocus" />
     </div>
 </template>
 
