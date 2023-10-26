@@ -66,7 +66,6 @@ onBeforeUnmount(async () => {
     background-color: var(--common-background-color);
     height: 100%;
     min-width: 900px;
-    color: var(--block-font-color);
 
     .settings-space {
         width: 60%;
