@@ -7,8 +7,8 @@ body {
 #app {
     width: 100vw;
     height: 100vh;
-    background-color: #000000;
-    color: #ccc;
+    background-color: #252526;
+    color: #d4d4d4;
 }
 
 .navbar {
@@ -47,9 +47,19 @@ body {
     height: 32px;
     border: none;
     border-radius: 5px;
+    color: #ffffff;
 }
 
 .confirm {
     background-color: #2975e9;
-    color: #ffffff;
+}
+
+.cancel {
+    background-color: #5b5b5e;
+}
+
+input {
+    background-color: #3d3d3f;
+    border: none;
+    color: #d4d4d4;
 }

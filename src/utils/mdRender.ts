@@ -13,7 +13,6 @@ import python from 'highlight.js/lib/languages/python'
 import less from 'highlight.js/lib/languages/less'
 import scss from 'highlight.js/lib/languages/scss'
 import sql from 'highlight.js/lib/languages/sql'
-import html from 'highlight.js/lib/languages/vbscript-html'
 import { emit } from '@tauri-apps/api/event'
 import { BusEvent } from '../types/BusEvent'
 
@@ -28,7 +27,6 @@ hljs.registerLanguage('python', python)
 hljs.registerLanguage('less', less)
 hljs.registerLanguage('scss', scss)
 hljs.registerLanguage('sql', sql)
-hljs.registerLanguage('html', html)
 
 const md: MarkdownIt = new MarkdownIt({
     highlight: (str, lang) => {

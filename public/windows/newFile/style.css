@@ -38,7 +38,7 @@ input[type='radio']:after {
     display: block;
     width: 12px;
     height: 12px;
-    background: #0798ff;
+    background: #7e0cf0;
     -webkit-border-radius: 12px;
     -moz-border-radius: 12px;
     border-radius: 12px;
@@ -51,7 +51,7 @@ input[type='radio']:after {
 }
 
 input[type='radio']:checked {
-    border-color: #0798ff;
+    border-color: #7e0cf0;
 }
 
 input[type='radio']:checked:after {
