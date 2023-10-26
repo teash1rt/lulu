@@ -17,7 +17,7 @@
             </div>
             <div class="folder-name">
                 <span>文件夹名称</span>
-                <input v-model="folderName" />
+                <input v-model="folderName" @keydown.enter="confirm" />
             </div>
             <div class="btn-group">
                 <button class="cancel" @click="cancel">取 消</button>
