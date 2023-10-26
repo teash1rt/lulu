@@ -1,5 +1,5 @@
 <template>
-    <ul onselectstart="return false">
+    <ul>
         <li v-for="item of props.fofInfo" :key="item.id">
             <div
                 class="file-node"
@@ -81,19 +81,20 @@ ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
+    font-size: 1.1rem;
 }
+
 .node-list {
     line-height: 24px;
-    color: var(--block-font-color);
 }
+
 .file-node {
     line-height: 24px;
-    color: var(--block-font-color);
     cursor: pointer;
     white-space: nowrap;
 
     &:hover {
-        background-color: #3d3e40;
+        background-color: var(--element-hover-color);
     }
 }
 
@@ -104,6 +105,6 @@ ul {
 }
 
 .is-selected {
-    background-color: #3d3e40;
+    background-color: var(--element-hover-color);
 }
 </style>

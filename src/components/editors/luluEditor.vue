@@ -167,7 +167,6 @@ defineExpose({
         position: fixed;
         display: flex;
         gap: 20px;
-        color: var(--block-font-color);
         padding: 10px;
         z-index: 100;
         background-color: var(--code-background-color);
@@ -182,7 +181,7 @@ defineExpose({
             margin: 0 5px;
             cursor: pointer;
             &:hover {
-                background-color: #3d3e40;
+                background-color: var(--element-hover-color);
             }
         }
 
