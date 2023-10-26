@@ -15,7 +15,7 @@
             @keydown.`.prevent="handleBlockquote($event)" />
         <div
             v-else-if="mode === 'preview'"
-            class="render"
+            class="render markdown"
             v-html="render(content).html"
             @dblclick="mode = 'edit'" />
     </div>
@@ -144,7 +144,7 @@ defineExpose({
         padding: 30px 40px 0 60px;
         width: calc(100% - 100px);
         height: calc(100% - 30px);
-        font-size: 20px;
+        font-size: 1.3rem;
         background-color: var(--code-background-color);
     }
 
