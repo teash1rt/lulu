@@ -1,21 +1,21 @@
 <template>
     <div class="lulu-md-editor">
         <textarea
-            v-if="status === 'md'"
+            v-if="mode === 'md'"
             @blur="handleBlur"
             @focus="handleFocus"
             @input="handleInput"
             v-model="content"
-            ref="textarea"
+            ref="textareaRef"
             @keydown.enter.prevent="handleEnter($event)"
             @keydown.tab.prevent="handleTab($event)"
             @keydown.`.prevent="handleBlockquote($event)" />
-        <div class="markdown" v-else v-html="html" @dblclick="handleFocus" />
+        <div class="markdown" v-else v-html="html" @dblclick="handleFocus" ref="htmlRef" />
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, PropType, onMounted } from 'vue'
+import { ref, nextTick, PropType, onMounted, watch } from 'vue'
 import { render } from '../../../utils/mdRender.ts'
 import {
     getLineScope,
@@ -26,6 +26,7 @@ import {
 import type { LuluInfo } from '../../../types/LuluInfo'
 import '../../../styles/markdown.less'
 import { LuluStore } from '../../../stores/LuluStore'
+import { openUrl } from '../../../utils/openUrl'
 
 const props = defineProps({
     luluInfo: {
@@ -36,7 +37,7 @@ const props = defineProps({
 
 const content = ref<string>(props.luluInfo.content)
 const html = ref<string>(render(content.value).html)
-const status = ref<'md' | 'html'>(props.luluInfo.content === '' ? 'md' : 'html')
+const mode = ref<'md' | 'html'>(props.luluInfo.content === '' ? 'md' : 'html')
 const luluStore = LuluStore()
 const handleBlur = () => {
     setTimeout(() => {
@@ -44,16 +45,16 @@ const handleBlur = () => {
     }, 200)
     if (content.value.trim()) {
         html.value = render(content.value).html
-        status.value = 'html'
+        mode.value = 'html'
     }
 }
 
-const textarea = ref<HTMLTextAreaElement | null>(null)
+const textareaRef = ref<HTMLTextAreaElement | null>(null)
 const handleFocus = () => {
     luluStore.changeFocus(true, props.luluInfo.id)
-    status.value = 'md'
+    mode.value = 'md'
     nextTick(() => {
-        textarea.value!.focus()
+        textareaRef.value!.focus()
         handleInput()
     })
 }
@@ -106,14 +107,39 @@ const handleBlockquote = (event: KeyboardEvent) => {
 }
 
 const handleInput = () => {
-    textarea.value!.style.height = 'auto'
-    textarea.value!.style.height = textarea.value!.scrollHeight + 'px'
+    textareaRef.value!.style.height = 'auto'
+    textareaRef.value!.style.height = textareaRef.value!.scrollHeight + 'px'
 }
 
+const handleClickLink = (anchors: NodeListOf<HTMLAnchorElement>) => {
+    for (let anchor of anchors) {
+        anchor.addEventListener('click', event => {
+            event.preventDefault()
+            openUrl(anchor.getAttribute('href'))
+        })
+    }
+}
+
+const htmlRef = ref<HTMLDivElement | null>(null)
 onMounted(() => {
-    if (status.value === 'md') {
+    if (mode.value === 'md') {
         handleInput()
     }
+
+    watch(
+        mode,
+        newV => {
+            if (newV === 'html') {
+                nextTick(() => {
+                    const anchors = htmlRef.value!.querySelectorAll('a')
+                    handleClickLink(anchors)
+                })
+            }
+        },
+        {
+            immediate: true
+        }
+    )
 })
 
 const getContent = () => {

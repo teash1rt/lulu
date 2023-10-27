@@ -37,7 +37,8 @@ fn init() {
                 (&settings_path.to_string_lossy()).to_string(),
                 "{
                     \"common\": {
-                      \"auto_save\": true
+                      \"auto_save\": true,
+                      \"open_in_browser\": true
                     },
                     \"display\": {
                       \"md_mode\": \"edit\",

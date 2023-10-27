@@ -21,7 +21,6 @@
             v-if="mode === 'edit'"
             v-model="content"
             :rows="content.split('\n').length"
-            ref="textarea"
             @keydown.enter.prevent="handleEnter($event)"
             @keydown.tab.prevent="handleTab($event)"
             @keydown.`.prevent="handleBlockquote($event)" />
@@ -29,12 +28,13 @@
             v-else-if="mode === 'preview'"
             class="render markdown"
             v-html="render(content).html"
-            @dblclick="mode = 'edit'" />
+            @dblclick="mode = 'edit'"
+            ref="renderRef" />
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, watch, onBeforeUnmount } from 'vue'
+import { ref, nextTick, watch, onBeforeUnmount, onMounted } from 'vue'
 import {
     getLineScope,
     getLineContext,
@@ -45,6 +45,7 @@ import '../../styles/markdown.less'
 import { invoke } from '@tauri-apps/api/tauri'
 import { render } from '../../utils/mdRender'
 import { SettingsStore } from '../../stores/SettingsStore'
+import { openUrl } from '../../utils/openUrl'
 
 const props = defineProps({
     content: {
@@ -60,7 +61,6 @@ const props = defineProps({
 const settingStore = SettingsStore()
 const mode = ref<'edit' | 'split' | 'preview'>(settingStore.settings!.display.md_mode)
 const content = ref<string>(props.content)
-const textarea = ref<HTMLTextAreaElement | null>(null)
 
 let lastLine: string | null = null
 const handleEnter = (event: KeyboardEvent) => {
@@ -108,6 +108,34 @@ const handleBlockquote = (event: KeyboardEvent) => {
     })
 }
 
+const renderRef = ref<HTMLDivElement | null>(null)
+
+const handleClickLink = (anchors: NodeListOf<HTMLAnchorElement>) => {
+    for (let anchor of anchors) {
+        anchor.addEventListener('click', event => {
+            event.preventDefault()
+            openUrl(anchor.getAttribute('href'))
+        })
+    }
+}
+
+onMounted(() => {
+    watch(
+        mode,
+        newV => {
+            if (newV === 'preview') {
+                nextTick(() => {
+                    const anchors = renderRef.value!.querySelectorAll('a')
+                    handleClickLink(anchors)
+                })
+            }
+        },
+        {
+            immediate: true
+        }
+    )
+})
+
 let lastContent = ''
 const saveFile = async (path: string = props.path) => {
     if (content.value !== lastContent && settingStore.settings!.common.auto_save) {
@@ -125,6 +153,12 @@ watch(
         content.value = props.content
         lastContent = props.content
         mode.value = settingStore.settings!.display.md_mode
+        if (mode.value === 'preview') {
+            nextTick(() => {
+                const anchors = renderRef.value!.querySelectorAll('a')
+                handleClickLink(anchors)
+            })
+        }
     }
 )
 
