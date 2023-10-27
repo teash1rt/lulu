@@ -69,9 +69,9 @@ const handlePick = async (item: FofInfo) => {
     } else if (fileStore.filePath !== item.file_path) {
         fileStore.filePath = item.file_path
         if (router.currentRoute.value.name !== 'file') {
-            router.push({ name: 'file' })
+            await router.push({ name: 'file' })
         }
-        emit(BusEvent.SwitchFilePath, item.file_path)
+        await emit(BusEvent.SwitchFilePath, item.file_path)
     }
 }
 </script>
