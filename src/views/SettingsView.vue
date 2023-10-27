@@ -44,6 +44,8 @@ import { SettingsStore } from '../stores/SettingsStore'
 import { changeTheme } from '../utils/changeTheme'
 import { codeTheme } from '../types/CodeTheme'
 import { invoke } from '@tauri-apps/api/tauri'
+import { BusEvent } from '../types/BusEvent'
+import { emit, listen } from '@tauri-apps/api/event'
 
 const settingsStore = SettingsStore()
 const settings = reactive<Settings>({ ...settingsStore.settings! })
@@ -57,10 +59,19 @@ watch(settings, newV => {
     }
 })
 
-onBeforeUnmount(async () => {
+const saveFile = async () => {
     await invoke('save_settings', {
         settings: settings
     })
+}
+
+listen(BusEvent.SaveFile, async () => {
+    await saveFile()
+    emit(BusEvent.SaveCompleted)
+})
+
+onBeforeUnmount(async () => {
+    await saveFile()
 })
 </script>
 
