@@ -67,7 +67,7 @@ const saveFile = async () => {
 
 listen(BusEvent.SaveFile, async () => {
     await saveFile()
-    emit(BusEvent.SaveCompleted)
+    await emit(BusEvent.SaveCompleted)
 })
 
 onBeforeUnmount(async () => {

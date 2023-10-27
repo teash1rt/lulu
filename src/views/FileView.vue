@@ -50,7 +50,7 @@ const fileRef = ref<InstanceType<typeof mdEditor | typeof luluEditor> | null>(nu
 
 listen(BusEvent.SaveFile, async () => {
     await fileRef.value!.saveFile()
-    emit(BusEvent.SaveCompleted)
+    await emit(BusEvent.SaveCompleted)
 })
 </script>
 
