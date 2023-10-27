@@ -34,9 +34,9 @@
                 :luluInfo="blocks[index]"
                 :ref="
                     ref =>
-                        (luluRef[index] = ref as InstanceType<
-                            typeof luluMdBlock | typeof luluCodeBlock
-                        >)
+                        (luluRef[index] = ref as
+                            | InstanceType<typeof luluMdBlock>
+                            | InstanceType<typeof luluCodeBlock>)
                 " />
         </div>
     </div>
@@ -66,8 +66,10 @@ const props = defineProps({
     }
 })
 
-const luluRef = ref<Array<InstanceType<typeof luluMdBlock | typeof luluCodeBlock>> | []>([])
-const components = ref<Array<Raw<typeof luluMdBlock | typeof luluCodeBlock>>>([])
+const luluRef = ref<
+    Array<InstanceType<typeof luluMdBlock> | InstanceType<typeof luluCodeBlock>> | []
+>([])
+const components = ref<Array<Raw<typeof luluMdBlock> | Raw<typeof luluCodeBlock>>>([])
 const blocks = ref<LuluInfo[]>([])
 
 const init = () => {
