@@ -17,7 +17,7 @@
             </div>
             <div class="file-name">
                 <span>文件名称</span>
-                <input v-model="fileName" />
+                <input v-model="fileName" @keydown.enter="confirm" />
             </div>
             <div class="file-type">
                 <span>文件类型 </span>

@@ -1,5 +1,5 @@
 /**
- * @meaning  structure of the lulu file
+ * @meaning  lulu 文件元素的类型
  */
 
 export type LuluInfo = {

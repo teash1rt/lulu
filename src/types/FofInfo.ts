@@ -1,19 +1,7 @@
 /**
- * @from main.rs
- * pub struct Fof {
- *  id: String,
- *  name: String,
- *  level: u32,
- *  is_dir: bool,
- *  file_path: String,
- *  extension: String,
- *  children: Vec<Fof>,
- * }
+ * @meaning 文件或文件夹的数据信息
  */
 
-/**
- * @meaning file or folder
- */
 export type FofInfo = {
     id: string
     name: string

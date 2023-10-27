@@ -29,6 +29,10 @@ self.MonacoEnvironment = {
     }
 }
 
+document.addEventListener('contextmenu', event => {
+    event.preventDefault()
+})
+
 const app = createApp(App)
 app.use(pinia).use(router).component('svg-icon', svgIcon)
 app.mount('#app')

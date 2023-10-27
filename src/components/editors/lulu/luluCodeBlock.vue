@@ -118,12 +118,17 @@ const runCode = async () => {
     status.value = 'afterRunning'
 }
 
+const clearOutput = () => {
+    status.value = 'beforeRunning'
+}
+
 const getContent = () => {
     return toRaw(editor.value)?.getValue()!
 }
 
 defineExpose({
-    getContent
+    getContent,
+    clearOutput
 })
 
 onBeforeUnmount(() => {

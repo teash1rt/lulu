@@ -1,6 +1,7 @@
 /**
- * @meaning results from run of the code
+ * @meaning 代码运行结果
  */
+
 export type CodeResult = {
     status: 'success' | 'error'
     message: string
