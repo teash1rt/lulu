@@ -9,6 +9,10 @@
                     <div class="attribute">自动保存</div>
                     <input type="checkbox" v-model="settings.common.auto_save" />
                 </div>
+                <div class="option">
+                    <div class="attribute">使用默认浏览器打开链接</div>
+                    <input type="checkbox" v-model="settings.common.open_in_browser" />
+                </div>
             </div>
             <h2>显示</h2>
             <hr />
