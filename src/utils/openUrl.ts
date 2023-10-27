@@ -5,9 +5,7 @@ import { SettingsStore } from '../stores/SettingsStore'
 const settingsStore = SettingsStore(pinia)
 
 export const openUrl = async (url: string | null) => {
-    if (url === null) {
-        return
+    if (url !== null) {
+        settingsStore.settings!.common.open_in_browser ? await open(url) : window.open(url)
     }
-    
-    settingsStore.settings!.common.open_in_browser ? await open(url) : window.open(url)
 }
