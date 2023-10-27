@@ -51,8 +51,8 @@ const md: MarkdownIt = new MarkdownIt({
         listType: 'ul',
         listClass: 'toc-list',
         linkClass: 'toc-link',
-        callback: html => {
-            emit(BusEvent.GetToc, html)
+        callback: async html => {
+            await emit(BusEvent.GetToc, html)
         }
     })
 
