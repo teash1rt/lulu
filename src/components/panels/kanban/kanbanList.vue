@@ -47,7 +47,7 @@ const handleRemove = async (id: string) => {
     await invoke('delete_kanban', { id })
     if (kanbanStore.kanbanId === id) {
         kanbanStore.kanbanId = ''
-        router.push({ name: 'home' })
+        await router.push({ name: 'home' })
     }
     await getKanbanList()
 }

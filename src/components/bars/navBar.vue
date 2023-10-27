@@ -36,11 +36,11 @@ listen(BusEvent.SaveCompleted, () => {
 
 const route = useRoute()
 const settingsStore = SettingsStore()
-const closeWindow = () => {
+const closeWindow = async () => {
     if (!settingsStore.settings!.common.auto_save) {
         appWindow.close()
     } else {
-        route.name !== 'home' ? emit(BusEvent.SaveFile) : appWindow.close()
+        route.name !== 'home' ? await emit(BusEvent.SaveFile) : appWindow.close()
     }
 }
 </script>
