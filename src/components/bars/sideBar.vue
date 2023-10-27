@@ -15,14 +15,14 @@
 
 <script setup lang="ts">
 import { ref, markRaw } from 'vue'
-import type { Raw } from 'vue'
+import type { Component } from 'vue'
 import folderPanel from '../panels/folder/folderPanel.vue'
 import kanbanPanel from '../panels/kanban/kanbanPanel.vue'
 import { useRouter } from 'vue-router'
 
-const expandComponent = ref<Raw<typeof folderPanel> | null>(null)
+const expandComponent = ref<Component | null>(null)
 
-const handlePick = (component: Raw<typeof folderPanel | typeof kanbanPanel>) => {
+const handlePick = (component: Component) => {
     expandComponent.value = expandComponent.value === component ? null : component
 }
 

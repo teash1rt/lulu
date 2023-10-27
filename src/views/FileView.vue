@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import { ref, watch, computed, markRaw, onMounted } from 'vue'
-import type { Raw } from 'vue'
+import type { Component } from 'vue'
 import { invoke } from '@tauri-apps/api/tauri'
 import mdEditor from '../components/editors/mdEditor.vue'
 import luluEditor from '../components/editors/luluEditor.vue'
@@ -27,7 +27,7 @@ const readFile = async (pathValue: string) => {
     })
 }
 
-const component = ref<Raw<typeof mdEditor | typeof luluEditor> | null>(null)
+const component = ref<Component | null>(null)
 
 watch(extension, newV => {
     newV === 'md' ? (component.value = markRaw(mdEditor)) : (component.value = markRaw(luluEditor))
@@ -46,7 +46,7 @@ listen(BusEvent.SwitchFilePath, async data => {
     path.value = newPath
 })
 
-const fileRef = ref<InstanceType<typeof mdEditor | typeof luluEditor> | null>(null)
+const fileRef = ref<InstanceType<typeof mdEditor> | InstanceType<typeof luluEditor> | null>(null)
 
 listen(BusEvent.SaveFile, async () => {
     await fileRef.value!.saveFile()
