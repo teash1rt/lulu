@@ -116,13 +116,13 @@ watch(
     () => kanbanStore.kanbanId,
     async (_, oldV) => {
         await saveFile(oldV)
-        getKanbanColumn()
+        await getKanbanColumn()
     }
 )
 
 listen(BusEvent.SaveFile, async () => {
     await saveFile(kanbanStore.kanbanId)
-    emit(BusEvent.SaveCompleted)
+    await emit(BusEvent.SaveCompleted)
 })
 
 onBeforeUnmount(async () => {

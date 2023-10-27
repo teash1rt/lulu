@@ -44,7 +44,7 @@
 
 <script setup lang="ts">
 import { ref, markRaw, watch, onBeforeUnmount } from 'vue'
-import { Raw } from 'vue'
+import type { Raw } from 'vue'
 import luluMdBlock from './lulu/luluMdBlock.vue'
 import luluCodeBlock from './lulu/luluCodeBlock.vue'
 import type { LuluInfo } from '../../types/LuluInfo'
