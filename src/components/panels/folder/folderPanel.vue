@@ -38,10 +38,9 @@ import { listen } from '@tauri-apps/api/event'
 import { FileStore } from '../../../stores/FileStore.ts'
 import type { FofInfo } from '../../../types/FofInfo'
 import { WebviewWindow } from '@tauri-apps/api/window'
-import type { CreateFile } from '../../../types/CreateFile'
+import type { CreateFile, CreateFolder } from '../../../types/CreateFof'
 import { BusEvent } from '../../../types/BusEvent'
 import { render } from '../../../utils/mdRender'
-import type { CreateFolder } from '../../../types/CreateFolder'
 
 const fofInfo = ref<FofInfo[]>([])
 const fileStore = FileStore()
