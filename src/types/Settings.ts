@@ -1,3 +1,7 @@
+/**
+ * @meaning 用户设置类型
+ */
+
 import type { CodeTheme } from './CodeTheme'
 
 export type Settings = {
