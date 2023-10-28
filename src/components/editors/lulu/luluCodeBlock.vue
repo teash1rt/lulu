@@ -5,7 +5,7 @@
             <svg-icon name="stop" class="icon" @click="runCode" v-else />
         </div>
         <div class="editor-box">
-            <div :id="props.luluInfo.id" ref="editor"></div>
+            <div :id="props.luluInfo.id" ref="editorRef"></div>
             <div class="code-result" v-if="status === 'afterRunning'">
                 <div class="info">
                     <svg-icon
@@ -38,6 +38,7 @@ const props = defineProps({
 })
 
 const editor = ref<monaco.editor.IStandaloneCodeEditor | null>(null)
+const editorRef = ref<HTMLDivElement | null>(null)
 
 const codeResult = reactive<CodeResult>({
     status: 'success',
@@ -56,7 +57,7 @@ monaco.editor.defineTheme('myCustomTheme', {
 
 const luluStore = LuluStore()
 onMounted(() => {
-    editor.value = monaco.editor.create(document.getElementById(props.luluInfo.id)!, {
+    editor.value = monaco.editor.create(editorRef.value!, {
         value: props.luluInfo.content,
         language: 'typescript',
         theme: 'myCustomTheme',
@@ -122,7 +123,7 @@ const clearOutput = () => {
 }
 
 const getContent = () => {
-    return toRaw(editor.value)?.getValue()!
+    return toRaw(editor.value)!.getValue()
 }
 
 defineExpose({
