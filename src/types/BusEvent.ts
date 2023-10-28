@@ -6,5 +6,8 @@ export enum BusEvent {
     SwitchFilePath = 'SwitchFilePath',
     SaveFile = 'SaveFile',
     GetToc = 'GetToc',
-    SaveCompleted = 'SaveCompleted'
+    SaveCompleted = 'SaveCompleted',
+    CreateFile = 'CreateFile',
+    CreateFolder = 'CreateFolder',
+    CreateKanban = 'CreateKanban'
 }

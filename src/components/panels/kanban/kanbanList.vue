@@ -21,6 +21,7 @@ import { useRouter } from 'vue-router'
 import { KanbanStore } from '../../../stores/KanbanStore'
 import { invoke } from '@tauri-apps/api/tauri'
 import { listen } from '@tauri-apps/api/event'
+import { BusEvent } from '../../../types/BusEvent'
 
 const list = ref<KanbanListItem[]>([])
 const getKanbanList = async () => {
@@ -36,7 +37,7 @@ const handlePick = (id: string) => {
     router.push({ name: 'kanban' })
 }
 
-listen('createKanban', async data => {
+listen(BusEvent.CreateKanban, async data => {
     await invoke('create_kanban', {
         name: (data.payload as { kanbanName: string }).kanbanName
     })
