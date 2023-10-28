@@ -1,7 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import pinia from './stores/store'
-import './styles/config.less'
 import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
 import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
 import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker'
@@ -10,6 +9,9 @@ import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
 import 'virtual:svg-icons-register'
 import svgIcon from './configs/svgIcon.vue'
 import router from './configs/router'
+import './styles/config.less'
+import './styles/window.less'
+import './styles/markdown.less'
 
 self.MonacoEnvironment = {
     getWorker(_, label) {
