@@ -5,7 +5,7 @@
             <svg-icon name="stop" class="icon" @click="runCode" v-else />
         </div>
         <div class="editor-box">
-            <div class="editor" :ref="setEditor"></div>
+            <div :id="props.luluInfo.id" ref="editorRef"></div>
             <div class="code-result" v-if="status === 'afterRunning'">
                 <div class="info">
                     <svg-icon
@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import * as monaco from 'monaco-editor'
-import { ref, toRaw, onBeforeUnmount, reactive, PropType } from 'vue'
+import { ref, toRaw, onBeforeUnmount, reactive, PropType, onMounted } from 'vue'
 import { invoke } from '@tauri-apps/api/tauri'
 import type { CodeResult } from '../../../types/CodeResult'
 import type { LuluInfo } from '../../../types/LuluInfo'
@@ -38,6 +38,7 @@ const props = defineProps({
 })
 
 const editor = ref<monaco.editor.IStandaloneCodeEditor | null>(null)
+const editorRef = ref<HTMLDivElement | null>(null)
 
 const codeResult = reactive<CodeResult>({
     status: 'success',
@@ -55,8 +56,8 @@ monaco.editor.defineTheme('myCustomTheme', {
 })
 
 const luluStore = LuluStore()
-const setEditor = (el: HTMLElement) => {
-    editor.value = monaco.editor.create(el, {
+onMounted(() => {
+    editor.value = monaco.editor.create(editorRef.value!, {
         value: props.luluInfo.content,
         language: 'typescript',
         theme: 'myCustomTheme',
@@ -104,8 +105,7 @@ const setEditor = (el: HTMLElement) => {
             luluStore.changeFocus(false, props.luluInfo.id)
         }, 200)
     })
-    return editor
-}
+})
 
 const status = ref<'beforeRunning' | 'isRunning' | 'afterRunning'>('beforeRunning')
 const runCode = async () => {
@@ -123,7 +123,7 @@ const clearOutput = () => {
 }
 
 const getContent = () => {
-    return toRaw(editor.value)?.getValue()!
+    return toRaw(editor.value)!.getValue()
 }
 
 defineExpose({

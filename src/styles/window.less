@@ -1,0 +1,77 @@
+.new-file,
+.new-folder,
+.new-kanban {
+    user-select: none;
+    background-color: var(--bar-background-color);
+    height: 100vh;
+}
+
+.navbar {
+    display: flex;
+    padding: 10px 0 0 15px;
+    margin-bottom: 10px;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.icon-box {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    &:hover {
+        background-color: var(--close-background-color);
+    }
+}
+
+.btn-group {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+}
+
+.confirm,
+.cancel {
+    cursor: pointer;
+    width: 60px;
+    height: 32px;
+    border: none;
+    border-radius: 5px;
+    color: var(--color-white);
+}
+
+.confirm {
+    background-color: var(--confirm-color);
+}
+
+.cancel {
+    background-color: var(--select-background-color);
+}
+
+.item {
+    margin: 22px auto 22px 20%;
+    display: flex;
+    gap: 30px;
+
+    input {
+        background-color: var(--select-background-color);
+        border: none;
+        &:focus {
+            outline: none;
+            box-shadow: none;
+        }
+    }
+}
+
+.icon {
+    width: 25px;
+    height: 25px;
+}
