@@ -67,7 +67,7 @@ const getFileData = async (path: string) => {
 
 const createFile = () => {
     new WebviewWindow('newFile', {
-        url: 'windows/newFile/index.html',
+        url: '/$/new-file',
         decorations: false,
         center: true,
         width: 500,
@@ -77,7 +77,7 @@ const createFile = () => {
     })
 }
 
-listen('createFile', async data => {
+listen(BusEvent.CreateFile, async data => {
     const payload = data.payload as CreateFile
     let path = ''
 
@@ -101,7 +101,7 @@ listen('createFile', async data => {
 
 const createFolder = () => {
     new WebviewWindow('newFolder', {
-        url: 'windows/newFolder/index.html',
+        url: '/$/new-folder',
         decorations: false,
         center: true,
         width: 500,
@@ -111,7 +111,7 @@ const createFolder = () => {
     })
 }
 
-listen('createFolder', async data => {
+listen(BusEvent.CreateFolder, async data => {
     const payload = data.payload as CreateFolder
     let path = ''
     if (fileStore.lastSelect === null) {

@@ -14,7 +14,7 @@ import { WebviewWindow } from '@tauri-apps/api/window'
 
 const handleAdd = async () => {
     new WebviewWindow('newKanban', {
-        url: 'windows/newKanban/index.html',
+        url: '/$/new-kanban',
         decorations: false,
         center: true,
         width: 500,
