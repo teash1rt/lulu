@@ -12,7 +12,7 @@
     --code-background-color: #1e1e1e;
     --block-background-color: #0a0a0a;
     --bar-background-color: #252526;
-    --block-font-color: #d4d4d4;
+    --common-font-color: #d4d4d4;
     --common-background-color: #363636;
     --theme-color: #7e0cf0;
     --theme-color-hover: #850bff;
@@ -25,7 +25,8 @@
     --home-font-color: #4d4e4f;
     --select-background-color: #575757;
     --color-white: #ffffff;
-    color: var(--block-font-color);
+    --confirm-color: #2975e9;
+    color: var(--common-font-color);
     font-family: calibri;
     font-size: 18px;
 }
@@ -59,7 +60,7 @@ li {
 }
 
 textarea {
-    color: var(--block-font-color);
+    color: var(--common-font-color);
     font-family: consola;
     resize: none;
     border: 0;
@@ -68,17 +69,17 @@ textarea {
 // TOC 目录样式
 .toc {
     &-list {
-        color: var(--block-font-color);
+        color: var(--common-font-color);
     }
 
     &-link {
         text-decoration: none;
-        color: var(--block-font-color);
+        color: var(--common-font-color);
     }
 }
 
 input {
-    color: var(--block-font-color);
+    color: var(--common-font-color);
 }
 
 input[type='checkbox'] {
@@ -144,7 +145,7 @@ input[type='checkbox']:checked:after {
 
 select {
     background-color: var(--select-background-color);
-    color: var(--block-font-color);
+    color: var(--common-font-color);
     font-size: 0.9rem;
     padding: 2px;
     &:focus {
