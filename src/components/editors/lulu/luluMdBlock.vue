@@ -8,8 +8,7 @@
             v-model="content"
             ref="textareaRef"
             @keydown.enter.prevent="handleEnter($event)"
-            @keydown.tab.prevent="handleTab($event)"
-            @keydown.`.prevent="handleBlockquote($event)" />
+            @keydown.tab.prevent="handleTab($event)" />
         <div class="markdown" v-else v-html="html" @dblclick="handleFocus" ref="htmlRef" />
     </div>
 </template>
@@ -17,12 +16,7 @@
 <script setup lang="ts">
 import { ref, nextTick, PropType, onMounted, watch } from 'vue'
 import { render } from '../../../utils/mdRender.ts'
-import {
-    getLineScope,
-    getLineContext,
-    getTabContext,
-    getBlockquoteContext
-} from '../../../utils/mdContext'
+import { getLineScope, getLineContext, getTabContext } from '../../../utils/mdContext'
 import type { LuluInfo } from '../../../types/LuluInfo'
 import '../../../styles/markdown.less'
 import { LuluStore } from '../../../stores/LuluStore'
@@ -92,18 +86,6 @@ const handleTab = (event: KeyboardEvent) => {
             target.selectionEnd = pos + 2
         })
     }
-}
-
-const handleBlockquote = (event: KeyboardEvent) => {
-    const target = event.target as HTMLInputElement
-    const pos = target.selectionStart!
-    let { l, r } = getLineScope(content.value, pos)
-    const curLine = content.value.slice(l, r)
-    const context = getBlockquoteContext(curLine)
-    content.value = content.value.slice(0, l) + context + content.value.slice(r)
-    nextTick(() => {
-        target.selectionEnd = pos + 1
-    })
 }
 
 const handleInput = () => {
