@@ -61,10 +61,3 @@ export const getTabContext = (lastLine: string, curLine: string) => {
     }
     return ' '.repeat(curIdx + 2) + curLine
 }
-
-export const getBlockquoteContext = (curLine: string) => {
-    if (curLine.length === 2 && curLine[0] === '`' && curLine[1] === '`') {
-        return curLine + '`' + '\n' + '```'
-    }
-    return curLine + '`'
-}

@@ -1,0 +1,15 @@
+:root {
+    --vp-home-hero-name-color: transparent;
+    --vp-home-hero-name-background: -webkit-linear-gradient(315deg, #7e0cf0 25%, #fe26c1);
+    --vp-layout-max-width: 1850px;
+    --vp-sidebar-width: 400px;
+    --vp-doc-top: 100px;
+}
+
+.VPDoc.has-aside .container .content-container {
+    max-width: 900px;
+}
+
+.VPHero.has-image.VPHomeHero {
+    margin-bottom: 20px;
+}

@@ -22,8 +22,7 @@
             v-model="content"
             :rows="content.split('\n').length"
             @keydown.enter.prevent="handleEnter($event)"
-            @keydown.tab.prevent="handleTab($event)"
-            @keydown.`.prevent="handleBlockquote($event)" />
+            @keydown.tab.prevent="handleTab($event)" />
         <div
             v-else-if="mode === 'preview'"
             class="render markdown"
@@ -35,12 +34,7 @@
 
 <script setup lang="ts">
 import { ref, nextTick, watch, onBeforeUnmount, onMounted } from 'vue'
-import {
-    getLineScope,
-    getLineContext,
-    getTabContext,
-    getBlockquoteContext
-} from '../../utils/mdContext'
+import { getLineScope, getLineContext, getTabContext } from '../../utils/mdContext'
 import '../../styles/markdown.less'
 import { invoke } from '@tauri-apps/api/tauri'
 import { render } from '../../utils/mdRender'
@@ -94,18 +88,6 @@ const handleTab = (event: KeyboardEvent) => {
             target.selectionEnd = pos + 2
         })
     }
-}
-
-const handleBlockquote = (event: KeyboardEvent) => {
-    const target = event.target as HTMLInputElement
-    const pos = target.selectionStart!
-    let { l, r } = getLineScope(content.value, pos)
-    const curLine = content.value.slice(l, r)
-    const context = getBlockquoteContext(curLine)
-    content.value = content.value.slice(0, l) + context + content.value.slice(r)
-    nextTick(() => {
-        target.selectionEnd = pos + 1
-    })
 }
 
 const renderRef = ref<HTMLDivElement | null>(null)
