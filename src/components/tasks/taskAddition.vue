@@ -20,6 +20,7 @@ const handleAddition = () => {
         status.value = 'icon'
         if (content.value.trim().length) {
             emit('addTask', content.value)
+            content.value = ''
         }
     }
 }
