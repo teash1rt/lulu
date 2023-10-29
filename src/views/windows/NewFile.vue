@@ -30,8 +30,8 @@
 import { appWindow } from '@tauri-apps/api/window'
 import { ref } from 'vue'
 import { emit } from '@tauri-apps/api/event'
-import '../../styles/window.less'
 import { BusEvent } from '../../types/BusEvent'
+import '../../styles/window.less'
 
 const fileName = ref<string>('')
 const fileType = ref<'lulu' | 'md'>('lulu')
