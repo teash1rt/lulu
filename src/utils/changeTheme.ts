@@ -2,7 +2,7 @@ import type { CodeTheme } from '../types/CodeTheme'
 
 export const changeTheme = (theme: CodeTheme) => {
     const head = document.head
-    const oldLink = head.querySelector('link[rel="stylesheet"]')
+    const oldLink = head.querySelector('link[rel="stylesheet"][href*="themes"]')
     if (oldLink) {
         head.removeChild(oldLink)
     }
